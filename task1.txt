@@ -1,0 +1,18 @@
+thông tin người dùng.
+
+struct của thrift gồm:
+- id: i64
+- name: string
+- age: i16
+- gender: i8
+
+service
+
+- create user profile:
+- get user profile: truyen id
+- edit user profile: 
+
+
+phía server: 
+
+phía client: tạo connection + gọi api.
