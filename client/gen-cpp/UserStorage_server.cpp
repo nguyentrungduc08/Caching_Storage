@@ -16,6 +16,9 @@ using boost::shared_ptr;
 
 using namespace  ::Task1;
 
+Task1::listUser     _listUsers;
+Task1::idcounter    _idCounter;
+
 class UserStorageHandler : virtual public UserStorageIf {
  public:
   UserStorageHandler() {

@@ -4,7 +4,7 @@ struct UserProfile {
   1: i32 uid,
   2: string name,
   3: i16 age,
-  4: i8 gender	
+  4: i16 gender	
 }
 
 typedef list<UserProfile> listUser

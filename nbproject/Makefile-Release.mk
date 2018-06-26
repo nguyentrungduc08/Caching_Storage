@@ -34,7 +34,11 @@ include Makefile
 OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES= \
+	${OBJECTDIR}/gen-cpp/UserStorage.o \
+	${OBJECTDIR}/gen-cpp/UserStorage_server.o \
+	${OBJECTDIR}/gen-cpp/user_profile_constants.o \
+	${OBJECTDIR}/gen-cpp/user_profile_types.o
 
 
 # C Compiler Flags
@@ -59,7 +63,27 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/gen-cpp/UserStorage.o: gen-cpp/UserStorage.cpp 
+	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/UserStorage.o gen-cpp/UserStorage.cpp
+
+${OBJECTDIR}/gen-cpp/UserStorage_server.o: gen-cpp/UserStorage_server.cpp 
+	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/UserStorage_server.o gen-cpp/UserStorage_server.cpp
+
+${OBJECTDIR}/gen-cpp/user_profile_constants.o: gen-cpp/user_profile_constants.cpp 
+	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/user_profile_constants.o gen-cpp/user_profile_constants.cpp
+
+${OBJECTDIR}/gen-cpp/user_profile_types.o: gen-cpp/user_profile_types.cpp 
+	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/user_profile_types.o gen-cpp/user_profile_types.cpp
 
 # Subprojects
 .build-subprojects:
