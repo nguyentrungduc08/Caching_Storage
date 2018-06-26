@@ -31,6 +31,7 @@ public:
 
     int32_t createUser(const UserProfile& user) {
         // Your implementation goes here
+        _listUsers.emplace_back(user);
         printf("createUser\n");
     }
 

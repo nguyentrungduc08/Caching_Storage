@@ -46,6 +46,7 @@
             <pElem>/usr/local/include/thrift</pElem>
             <pElem>/usr/local/include/boost</pElem>
           </incDir>
+          <commandLine>-std=c++11</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
