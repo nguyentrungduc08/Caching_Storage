@@ -31,7 +31,10 @@ public:
 
     int32_t createUser(const UserProfile& user) {
         // Your implementation goes here
+        //UserProfile usert = user;
+        
         _listUsers.emplace_back(user);
+        std::cout << "num of list user: " << _listUsers.size() << std::endl;
         printf("createUser\n");
     }
 

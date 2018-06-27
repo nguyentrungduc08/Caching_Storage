@@ -36,7 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/gen-cpp/UserStorage.o \
-	${OBJECTDIR}/gen-cpp/UserStorage_server.o \
+	${OBJECTDIR}/gen-cpp/server.o \
 	${OBJECTDIR}/gen-cpp/user_profile_constants.o \
 	${OBJECTDIR}/gen-cpp/user_profile_types.o
 
@@ -70,10 +70,10 @@ ${OBJECTDIR}/gen-cpp/UserStorage.o: gen-cpp/UserStorage.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/UserStorage.o gen-cpp/UserStorage.cpp
 
-${OBJECTDIR}/gen-cpp/UserStorage_server.o: gen-cpp/UserStorage_server.cpp 
+${OBJECTDIR}/gen-cpp/server.o: gen-cpp/server.cpp 
 	${MKDIR} -p ${OBJECTDIR}/gen-cpp
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/UserStorage_server.o gen-cpp/UserStorage_server.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/server.o gen-cpp/server.cpp
 
 ${OBJECTDIR}/gen-cpp/user_profile_constants.o: gen-cpp/user_profile_constants.cpp 
 	${MKDIR} -p ${OBJECTDIR}/gen-cpp

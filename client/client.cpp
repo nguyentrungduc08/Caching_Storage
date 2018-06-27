@@ -28,7 +28,7 @@ using boost::make_shared;
 
 //protype function
 void 		printMenuOption();
-int32_t 	createProfileUser(const UserStorageClient&);
+//int32_t 	createProfileUser(const UserStorageClient&);
 
 int main(int argc, char **argv){
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
@@ -49,8 +49,19 @@ int main(int argc, char **argv){
 				case 0:
 					loop = false;
 					break;
-				case 1:
-					std::cout << createProfileUser(client) << std::endl;		 
+				case 1:{
+					//std::cout << createProfileUser(client) << std::endl;		 
+					UserProfile profile;
+         				profile.uid = -1;
+         				std::cout << "name : ";
+         				std::cin >> profile.name;
+         				std::cout << "age: ";
+         				std::cin >> profile.age;
+         				std::cout << "gender: ";
+         				std::cin >> profile.gender;
+        	 			int32_t res = client.createUser(profile);
+					std::cout << "uid form server : " << res << std::endl;
+					}
 					break;	
 				case 2:
 					break;
@@ -93,6 +104,7 @@ printMenuOption(){
 	return;
 }
 
+/*
 int32_t 	
 createProfileUser(const UserStorageClient& client){
 	std::string name;
@@ -106,6 +118,8 @@ createProfileUser(const UserStorageClient& client){
 	std::cin >> profile.age;
 	std::cout << "gender: ";
 	std::cin >> profile.gender;
-  	return client.createUser(profile);
+	int32_t res = client.createUser(profile);
+	return res;
 }
+*/
 
