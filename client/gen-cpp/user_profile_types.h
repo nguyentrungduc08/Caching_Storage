@@ -19,6 +19,8 @@ namespace Task1 {
 
 typedef std::vector<class UserProfile>  listUser;
 
+typedef std::map<int32_t, class UserProfile>  Users;
+
 typedef int32_t idcounter;
 
 typedef struct _UserProfile__isset {

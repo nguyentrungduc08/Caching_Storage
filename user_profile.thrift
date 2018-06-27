@@ -8,6 +8,7 @@ struct UserProfile {
 }
 
 typedef list<UserProfile> listUser
+typedef map<i32, UserProfile> Users
 typedef i32 idcounter    
 
 service UserStorage {
