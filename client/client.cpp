@@ -61,14 +61,14 @@ int main(int argc, char **argv){
          					std::cout << "gender: ";
          					std::cin >> profile.gender;
         	 				int32_t res = client.createUser(profile);
-						std::cout << "uid form server : " << res << std::endl;
+						std::cout << "Success. Uid form server : " << res << std::endl;
 					}
 					break;	
 				case 2:
 					{
 						UserProfile profile;
 						int32_t uid;
-						std::cout << "uid: " << std::endl;
+						std::cout << "uid: ";
 						std::cin >> uid;
 						client.getUser(profile, uid);
 						if (profile.uid == -1){
@@ -82,7 +82,26 @@ int main(int argc, char **argv){
 					
 					}
 					break;
-				case 3:
+				case 3: {
+						UserProfile profile;
+						int32_t uid;
+						std::cout << "uid: ";
+						std::cin >> uid;
+						std::cout << "name: ";
+						std::cin >> profile.name;
+						std::cout << "age: ";
+						std::cin >> profile.age;
+						std::cout << "gender: ";
+						std::cin >> profile.gender;
+						
+						int32_t res = client.editUser(uid, profile);
+						if (res == -1){
+							std::cout << "invalid uid " << uid << "!!!" << std::endl;
+						} else {
+							std::cout << "Update success profile id " << uid << std::endl; 
+						}
+						
+					}
 					break;
 				
 				default:

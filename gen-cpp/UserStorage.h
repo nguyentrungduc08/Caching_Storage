@@ -17,7 +17,7 @@ class UserStorageIf {
   virtual ~UserStorageIf() {}
   virtual int32_t createUser(const UserProfile& user) = 0;
   virtual void getUser(UserProfile& _return, const int32_t uid) = 0;
-  virtual void editUser(const int32_t uid) = 0;
+  virtual int32_t editUser(const int32_t uid, const UserProfile& user) = 0;
 };
 
 class UserStorageIfFactory {
@@ -54,8 +54,9 @@ class UserStorageNull : virtual public UserStorageIf {
   void getUser(UserProfile& /* _return */, const int32_t /* uid */) {
     return;
   }
-  void editUser(const int32_t /* uid */) {
-    return;
+  int32_t editUser(const int32_t /* uid */, const UserProfile& /* user */) {
+    int32_t _return = 0;
+    return _return;
   }
 };
 
@@ -276,8 +277,9 @@ class UserStorage_getUser_presult {
 };
 
 typedef struct _UserStorage_editUser_args__isset {
-  _UserStorage_editUser_args__isset() : uid(false) {}
+  _UserStorage_editUser_args__isset() : uid(false), user(false) {}
   bool uid;
+  bool user;
 } _UserStorage_editUser_args__isset;
 
 class UserStorage_editUser_args {
@@ -289,6 +291,7 @@ class UserStorage_editUser_args {
   virtual ~UserStorage_editUser_args() throw() {}
 
   int32_t uid;
+  UserProfile user;
 
   _UserStorage_editUser_args__isset __isset;
 
@@ -296,9 +299,15 @@ class UserStorage_editUser_args {
     uid = val;
   }
 
+  void __set_user(const UserProfile& val) {
+    user = val;
+  }
+
   bool operator == (const UserStorage_editUser_args & rhs) const
   {
     if (!(uid == rhs.uid))
+      return false;
+    if (!(user == rhs.user))
       return false;
     return true;
   }
@@ -321,23 +330,37 @@ class UserStorage_editUser_pargs {
   virtual ~UserStorage_editUser_pargs() throw() {}
 
   const int32_t* uid;
+  const UserProfile* user;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
+typedef struct _UserStorage_editUser_result__isset {
+  _UserStorage_editUser_result__isset() : success(false) {}
+  bool success;
+} _UserStorage_editUser_result__isset;
 
 class UserStorage_editUser_result {
  public:
 
-  UserStorage_editUser_result() {
+  UserStorage_editUser_result() : success(0) {
   }
 
   virtual ~UserStorage_editUser_result() throw() {}
 
+  int32_t success;
 
-  bool operator == (const UserStorage_editUser_result & /* rhs */) const
+  _UserStorage_editUser_result__isset __isset;
+
+  void __set_success(const int32_t val) {
+    success = val;
+  }
+
+  bool operator == (const UserStorage_editUser_result & rhs) const
   {
+    if (!(success == rhs.success))
+      return false;
     return true;
   }
   bool operator != (const UserStorage_editUser_result &rhs) const {
@@ -351,6 +374,10 @@ class UserStorage_editUser_result {
 
 };
 
+typedef struct _UserStorage_editUser_presult__isset {
+  _UserStorage_editUser_presult__isset() : success(false) {}
+  bool success;
+} _UserStorage_editUser_presult__isset;
 
 class UserStorage_editUser_presult {
  public:
@@ -358,6 +385,9 @@ class UserStorage_editUser_presult {
 
   virtual ~UserStorage_editUser_presult() throw() {}
 
+  int32_t* success;
+
+  _UserStorage_editUser_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -389,9 +419,9 @@ class UserStorageClient : virtual public UserStorageIf {
   void getUser(UserProfile& _return, const int32_t uid);
   void send_getUser(const int32_t uid);
   void recv_getUser(UserProfile& _return);
-  void editUser(const int32_t uid);
-  void send_editUser(const int32_t uid);
-  void recv_editUser();
+  int32_t editUser(const int32_t uid, const UserProfile& user);
+  void send_editUser(const int32_t uid, const UserProfile& user);
+  int32_t recv_editUser();
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -463,13 +493,13 @@ class UserStorageMultiface : virtual public UserStorageIf {
     return;
   }
 
-  void editUser(const int32_t uid) {
+  int32_t editUser(const int32_t uid, const UserProfile& user) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->editUser(uid);
+      ifaces_[i]->editUser(uid, user);
     }
-    ifaces_[i]->editUser(uid);
+    return ifaces_[i]->editUser(uid, user);
   }
 
 };

@@ -360,6 +360,14 @@ uint32_t UserStorage_editUser_args::read(::apache::thrift::protocol::TProtocol* 
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->user.read(iprot);
+          this->__isset.user = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -380,6 +388,10 @@ uint32_t UserStorage_editUser_args::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeI32(this->uid);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->user.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -391,6 +403,10 @@ uint32_t UserStorage_editUser_pargs::write(::apache::thrift::protocol::TProtocol
 
   xfer += oprot->writeFieldBegin("uid", ::apache::thrift::protocol::T_I32, 1);
   xfer += oprot->writeI32((*(this->uid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("user", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->user)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -416,7 +432,20 @@ uint32_t UserStorage_editUser_result::read(::apache::thrift::protocol::TProtocol
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -431,6 +460,11 @@ uint32_t UserStorage_editUser_result::write(::apache::thrift::protocol::TProtoco
 
   xfer += oprot->writeStructBegin("UserStorage_editUser_result");
 
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
+    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -454,7 +488,20 @@ uint32_t UserStorage_editUser_presult::read(::apache::thrift::protocol::TProtoco
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -579,19 +626,20 @@ void UserStorageClient::recv_getUser(UserProfile& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getUser failed: unknown result");
 }
 
-void UserStorageClient::editUser(const int32_t uid)
+int32_t UserStorageClient::editUser(const int32_t uid, const UserProfile& user)
 {
-  send_editUser(uid);
-  recv_editUser();
+  send_editUser(uid, user);
+  return recv_editUser();
 }
 
-void UserStorageClient::send_editUser(const int32_t uid)
+void UserStorageClient::send_editUser(const int32_t uid, const UserProfile& user)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("editUser", ::apache::thrift::protocol::T_CALL, cseqid);
 
   UserStorage_editUser_pargs args;
   args.uid = &uid;
+  args.user = &user;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -599,7 +647,7 @@ void UserStorageClient::send_editUser(const int32_t uid)
   oprot_->getTransport()->flush();
 }
 
-void UserStorageClient::recv_editUser()
+int32_t UserStorageClient::recv_editUser()
 {
 
   int32_t rseqid = 0;
@@ -624,12 +672,17 @@ void UserStorageClient::recv_editUser()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
+  int32_t _return;
   UserStorage_editUser_presult result;
+  result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
-  return;
+  if (result.__isset.success) {
+    return _return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "editUser failed: unknown result");
 }
 
 bool UserStorageProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
@@ -782,7 +835,8 @@ void UserStorageProcessor::process_editUser(int32_t seqid, ::apache::thrift::pro
 
   UserStorage_editUser_result result;
   try {
-    iface_->editUser(args.uid);
+    result.success = iface_->editUser(args.uid, args.user);
+    result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "UserStorage.editUser");

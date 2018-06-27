@@ -13,5 +13,5 @@ typedef i32 idcounter
 service UserStorage {
   i32 createUser(1: UserProfile user),
   UserProfile getUser(1: i32 uid),
-  void editUser(1: i32 uid)
+  i32 editUser(1: i32 uid, 2: UserProfile user)
 }

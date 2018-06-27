@@ -54,10 +54,19 @@ public:
         _return = tmp;
     }
 
-    void editUser(const int32_t uid) {
+    int32_t editUser(const int32_t uid, const UserProfile& user) {
         // Your implementation goes here
         std::cout << "uid from client " << uid << std::endl;
         printf("editUser \n");
+        for(int i = 0; i < _listUsers.size(); ++i){
+            if (_listUsers[i].uid == uid){
+                _listUsers[i].name = user.name;
+                _listUsers[i].age = user.age;
+                _listUsers[i].gender = user.gender;
+                return _listUsers[i].uid;
+            }
+        }
+        return -1;
     }
 };
 

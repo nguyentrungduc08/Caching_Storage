@@ -32,7 +32,7 @@ class UserStorageHandler : virtual public UserStorageIf {
     printf("getUser\n");
   }
 
-  void editUser(const int32_t uid) {
+  int32_t editUser(const int32_t uid, const UserProfile& user) {
     // Your implementation goes here
     printf("editUser\n");
   }
