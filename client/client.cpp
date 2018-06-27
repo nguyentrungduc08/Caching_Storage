@@ -49,21 +49,38 @@ int main(int argc, char **argv){
 				case 0:
 					loop = false;
 					break;
-				case 1:{
-					//std::cout << createProfileUser(client) << std::endl;		 
-					UserProfile profile;
-         				profile.uid = -1;
-         				std::cout << "name : ";
-         				std::cin >> profile.name;
-         				std::cout << "age: ";
-         				std::cin >> profile.age;
-         				std::cout << "gender: ";
-         				std::cin >> profile.gender;
-        	 			int32_t res = client.createUser(profile);
-					std::cout << "uid form server : " << res << std::endl;
+				case 1:
+					{
+						//std::cout << createProfileUser(client) << std::endl;		 
+						UserProfile profile;
+         					profile.uid = -1;
+         					std::cout << "name : ";
+         					std::cin >> profile.name;
+         					std::cout << "age: ";
+         					std::cin >> profile.age;
+         					std::cout << "gender: ";
+         					std::cin >> profile.gender;
+        	 				int32_t res = client.createUser(profile);
+						std::cout << "uid form server : " << res << std::endl;
 					}
 					break;	
 				case 2:
+					{
+						UserProfile profile;
+						int32_t uid;
+						std::cout << "uid: " << std::endl;
+						std::cin >> uid;
+						client.getUser(profile, uid);
+						if (profile.uid == -1){
+							std::cout << "invalid uid " << uid << "!!!" << std::endl;
+						} else {
+							std::cout << "profile User with id: " << uid << std::endl;
+							std::cout << "name : " << profile.name << std::endl;
+							std::cout << "age: "   << profile.age << std::endl;
+							std::cout << "gender: " << profile.gender << std::endl;
+						}
+					
+					}
 					break;
 				case 3:
 					break;
@@ -80,8 +97,8 @@ int main(int argc, char **argv){
 			
 		
 			
-		int32_t uid = 8;
-		client.editUser(uid);
+		//int32_t uid = 8;
+		//client.editUser(uid);
 
 		std::cout << "DONE" << std::endl;
 		transport->close();

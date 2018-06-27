@@ -19,7 +19,7 @@ using boost::shared_ptr;
 using namespace  ::Task1;
 
 Task1::listUser     _listUsers;
-Task1::idcounter    _idCounter;
+Task1::idcounter    _idCounter = 0;
 
 class UserStorageHandler : virtual public UserStorageIf {
 public:
@@ -31,16 +31,27 @@ public:
 
     int32_t createUser(const UserProfile& user) {
         // Your implementation goes here
-        //UserProfile usert = user;
-        
-        _listUsers.emplace_back(user);
-        std::cout << "num of list user: " << _listUsers.size() << std::endl;
         printf("createUser\n");
+        UserProfile usert = user;
+        ++_idCounter;
+        usert.__set_uid(_idCounter);
+        _listUsers.emplace_back(usert);
+        std::cout << "num of list user: " << _listUsers.size() << std::endl;
+        return _idCounter;
     }
 
     void getUser(UserProfile& _return, const int32_t uid) {
         // Your implementation goes here
         printf("getUser\n");
+        UserProfile tmp;
+        tmp.__set_uid(-1);
+        for (int i = 0 ; i < _listUsers.size(); ++i){
+            if (_listUsers[i].uid == uid){
+                _return = _listUsers[i];
+                return;
+            }
+        }
+        _return = tmp;
     }
 
     void editUser(const int32_t uid) {
