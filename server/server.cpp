@@ -30,8 +30,6 @@ Task1::listUser     _listUsers;
 Task1::Users        _UserData;
 Task1::idcounter    _idCounter = 0;
 
-
-
 class UserStorageHandler : virtual public UserStorageIf {
 private:
     HashDB db;
