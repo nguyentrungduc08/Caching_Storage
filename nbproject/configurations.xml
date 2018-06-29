@@ -4,21 +4,21 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>gen-cpp/UserStorage.h</itemPath>
-      <itemPath>gen-cpp/user_profile_constants.h</itemPath>
-      <itemPath>gen-cpp/user_profile_types.h</itemPath>
+      <itemPath>server/UserStorage.h</itemPath>
+      <itemPath>server/user_profile_constants.h</itemPath>
+      <itemPath>server/user_profile_types.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>gen-cpp/UserStorage.cpp</itemPath>
-      <itemPath>gen-cpp/user_profile_constants.cpp</itemPath>
-      <itemPath>gen-cpp/user_profile_types.cpp</itemPath>
+      <itemPath>server/UserStorage.cpp</itemPath>
+      <itemPath>server/user_profile_constants.cpp</itemPath>
+      <itemPath>server/user_profile_types.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>gen-cpp/server.cpp</itemPath>
+      <itemPath>server/server.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -53,22 +53,22 @@
             <linkerLibLibItem>thrift</linkerLibLibItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
           </linkerLibItems>
-          <commandLine>-lthriftnb -levent</commandLine>
+          <commandLine>-lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc</commandLine>
         </linkerTool>
       </compileType>
-      <item path="gen-cpp/UserStorage.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/UserStorage.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/UserStorage.h" ex="false" tool="3" flavor2="0">
+      <item path="server/UserStorage.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="gen-cpp/server.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/server.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_constants.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/user_profile_constants.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_constants.h" ex="false" tool="3" flavor2="0">
+      <item path="server/user_profile_constants.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_types.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/user_profile_types.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_types.h" ex="false" tool="3" flavor2="0">
+      <item path="server/user_profile_types.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -91,19 +91,19 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="gen-cpp/UserStorage.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/UserStorage.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/UserStorage.h" ex="false" tool="3" flavor2="0">
+      <item path="server/UserStorage.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="gen-cpp/server.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/server.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_constants.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/user_profile_constants.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_constants.h" ex="false" tool="3" flavor2="0">
+      <item path="server/user_profile_constants.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_types.cpp" ex="false" tool="1" flavor2="0">
+      <item path="server/user_profile_types.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="gen-cpp/user_profile_types.h" ex="false" tool="3" flavor2="0">
+      <item path="server/user_profile_types.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

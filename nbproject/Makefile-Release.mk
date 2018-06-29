@@ -35,10 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/gen-cpp/UserStorage.o \
-	${OBJECTDIR}/gen-cpp/server.o \
-	${OBJECTDIR}/gen-cpp/user_profile_constants.o \
-	${OBJECTDIR}/gen-cpp/user_profile_types.o
+	${OBJECTDIR}/server/UserStorage.o \
+	${OBJECTDIR}/server/server.o \
+	${OBJECTDIR}/server/user_profile_constants.o \
+	${OBJECTDIR}/server/user_profile_types.o
 
 
 # C Compiler Flags
@@ -65,25 +65,25 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/gen-cpp/UserStorage.o: gen-cpp/UserStorage.cpp 
-	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+${OBJECTDIR}/server/UserStorage.o: server/UserStorage.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/UserStorage.o gen-cpp/UserStorage.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorage.o server/UserStorage.cpp
 
-${OBJECTDIR}/gen-cpp/server.o: gen-cpp/server.cpp 
-	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+${OBJECTDIR}/server/server.o: server/server.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/server.o gen-cpp/server.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/server.o server/server.cpp
 
-${OBJECTDIR}/gen-cpp/user_profile_constants.o: gen-cpp/user_profile_constants.cpp 
-	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+${OBJECTDIR}/server/user_profile_constants.o: server/user_profile_constants.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/user_profile_constants.o gen-cpp/user_profile_constants.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_constants.o server/user_profile_constants.cpp
 
-${OBJECTDIR}/gen-cpp/user_profile_types.o: gen-cpp/user_profile_types.cpp 
-	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+${OBJECTDIR}/server/user_profile_types.o: server/user_profile_types.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/user_profile_types.o gen-cpp/user_profile_types.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_types.o server/user_profile_types.cpp
 
 # Subprojects
 .build-subprojects:
