@@ -53,6 +53,7 @@
             <linkerLibLibItem>thrift</linkerLibLibItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
           </linkerLibItems>
+          <commandLine>-lthriftnb -levent</commandLine>
         </linkerTool>
       </compileType>
       <item path="gen-cpp/UserStorage.cpp" ex="false" tool="1" flavor2="0">

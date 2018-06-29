@@ -63,7 +63,7 @@ LDLIBSOPTIONS=-lthrift -lpthread
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS} -lthriftnb -levent
 
 ${OBJECTDIR}/gen-cpp/UserStorage.o: gen-cpp/UserStorage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/gen-cpp

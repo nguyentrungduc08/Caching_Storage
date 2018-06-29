@@ -15,6 +15,9 @@
 #include <thrift/concurrency/PosixThreadFactory.h>
 #include <thrift/transport/TBufferTransports.h>
 
+//Kyoto Cabinet
+#include <kchashdb.h>
+
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
@@ -102,26 +105,10 @@ void        runTThreadedServer();
 int main(int argc, char **argv) {
    
 //    runTSimpleServer();
-    runTThreadedServer();
+//    runTThreadedServer();
 //    runTThreadPoolServer();
-//    runTNonblockingServer();
+    runTNonblockingServer();
 
-//TSimpleServer    
-//    TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
-//    server.serve();
-    
-//TNonblockingServer    
-//    shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(15);
-//    shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
-//    threadManager->threadFactory(threadFactory);
-//    threadManager->start();
-//    TNonblockingServer server(processor, protocolFactory, 8888, threadManager);
-//    server.serve();
-    
-//      
-//    TNonblockingServer server(processor, serverTransport, transportFactory, protocolFactory);
-//    server.serve();
-    
     return 0;
 }
 
@@ -181,11 +168,11 @@ runTThreadPoolServer()
 
 void        
 runTNonblockingServer(){
-    
     std::cout << "runTNonblockingServer" << std::endl;
     int port = 9090;
     shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
     shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
+//    shared_ptr<TProcessorFactory>   processor(new UserStorageProcessor(handler));
     shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
     shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
     shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory()); 
@@ -195,7 +182,7 @@ runTNonblockingServer(){
     threadManager->threadFactory(threadFactory);
     threadManager->start();
     
-    TThreadPoolServer server(processor, serverTransport, transportFactory, protocolFactory, threadManager);
+    TNonblockingServer server(processor, protocolFactory, port, threadManager);
     server.serve();
     return;
 }

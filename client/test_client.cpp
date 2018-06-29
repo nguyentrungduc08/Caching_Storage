@@ -33,9 +33,15 @@ using boost::make_shared;
 int numTurn;
 bool resultTest;
 
+int idCounter = 0;
+std::map<int, UserProfile> _UserData;
+
 //protype function
-bool 	parseInputParameter(int argc, char **argv);
-int	getCMD();
+bool 		parseInputParameter(int argc, char **argv);
+int		getCMD();
+int 		getAge();
+std::string	getName();
+int 		getgender();
 
 int main(int argc, char **argv){
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
@@ -52,8 +58,35 @@ int main(int argc, char **argv){
 	try{ 
     		transport->open();
 		
-		for(int i = 0; i < numTurn; ++i){
-			std::cout << getCMD() << std::endl; 
+		for(int i = 0; i < numTurn && resultTest; ++i){
+			int cmd = getCMD();
+			std::cout << cmd << std::endl; 
+			switch(cmd) {
+				case 1:{
+					UserProfile profile;
+					++idCounter;
+					profile.uid 	= idCounter;
+					profile.name 	= "asd";
+					profile.age 	= 1;
+					profile.gender	= 1;	
+					_UserData[idCount] = profile;
+				
+					int res = client.createUser(profile);
+					if (res != profile.uid){
+						resultTest = false;	
+					}
+				}		
+					break;	
+				case 2:{
+
+				}
+					break;
+				case 3:{
+					
+				}	
+					break;
+			}	
+		
 		} 
 				
 					
@@ -85,3 +118,24 @@ int
 getCMD(){
 	return rand() % 3 + 1;
 }
+
+int 		
+getAge(){
+	return rand() % 100 + 1; 
+}
+
+std::string	
+getName(){
+	int len = rand() 30 + 1;
+	std::string name;
+	for(int i = 0; i < len; ++i){
+		
+
+	}
+}
+
+int
+getgender(){
+	return rand() % 3;
+}
+

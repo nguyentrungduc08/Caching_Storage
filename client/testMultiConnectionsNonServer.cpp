@@ -1,5 +1,5 @@
 /* build cmd 
-g++ -std=c++11 gen-cpp/UserStorage.cpp gen-cpp/user_profile_types.cpp gen-cpp/user_profile_constants.cpp testMultiConnections.cpp -o testMultiConnections -lthrift -lpthread
+g++ -std=c++11 gen-cpp/UserStorage.cpp gen-cpp/user_profile_types.cpp gen-cpp/user_profile_constants.cpp testMultiConnectionsNonServer.cpp -o testMultiConnectionsNonServer -lthrift -lpthread
 
 using 
 ./test [num]
@@ -86,8 +86,9 @@ int main(int argc, char **argv){
 void
 task(){
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
-    	boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-    
+    	//boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    	boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
+
 	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
 	UserStorageClient client(protocol);
 	try{ 
