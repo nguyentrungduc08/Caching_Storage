@@ -38,7 +38,7 @@ std::map<int, UserProfile> _UserData;
 
 //protype function
 bool 		parseInputParameter(int argc, char **argv);
-int		getCMD();
+int			getCMD();
 int 		getAge();
 std::string	getName();
 int 		getgender();
@@ -126,12 +126,17 @@ getAge(){
 
 std::string	
 getName(){
+	static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+        
 	int len = rand() 30 + 1;
 	std::string name;
 	for(int i = 0; i < len; ++i){
-		
-
+		name += alphanum[rand() % (sizeof(alphanum) - 1)];
 	}
+	return name;
 }
 
 int
