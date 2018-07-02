@@ -40,7 +40,7 @@ Task1::idcounter    _idCounter = 0;
 
 class UserStorageHandler : virtual public UserStorageIf {
 private:
-    HashDB db;
+//    HashDB db;
 //    shared_ptr<KC_StorageClient> KCClient;
 //    shared_ptr<TTransport> transport;
 public:
@@ -49,20 +49,24 @@ public:
         std::cout << "Server Starting........." <<std::endl;
         std::cout << std::endl;
         
-        if (this->db.open("db.kch", HashDB::OWRITER | HashDB::OCREATE)) {
-            std::cout << "open KC database success" << std::endl; 
-        } else {
-            std::cerr << "open error: " << db.error().name() << std::endl; 
+        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
+        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+        KC_StorageClient KCClinet (protocol);
+        
+        try {
+            transport->open();
+            int nu = KCClinet.totalRecord();
+            std::cout << "total user's profile " << nu << std::endl;
+            transport->close();
+        } catch (TException &tx){
+            std::cerr << "ERROR: " << tx.what() << std::endl;
         }
-
+        
     }
     
     ~UserStorageHandler() {
-        if (this->db.close()) {
-            std::cout << "close KC database success" << std::endl;
-        } else {
-            std::cerr << "close error: " << db.error().name() << std::endl;
-        }
+        
     }
 
     int32_t createUser(const UserProfile& user) {
@@ -73,7 +77,7 @@ public:
         ++_idCounter;
         usert.__set_uid(_idCounter);
 
-        std::string binaryString = serializeI(_idCounter);
+        std::string binaryString = serialize(_idCounter);
         std::string sid = binaryString;
         std::string serialized_string = this->serialize(usert);
         
@@ -101,7 +105,7 @@ public:
         UserProfile tmp;
         tmp.__set_uid(-1);
         
-        std::string binaryString = serializeI(uid);
+        std::string binaryString = serialize(uid);
         std::cout << "out: " << binaryString << std::endl;
         //connect KC_service
         std::string sid = binaryString;
@@ -166,11 +170,15 @@ public:
         return serialized_string;
     }
 
-    std::string serializeI(idcounter uid){
+    std::string serialize(idcounter uid){
         std::string binaryString(4,'\n'); 
         for (int i = 0; i < 4; i++)
             binaryString[3 - i] = (uid >> (i * 8));
         return binaryString;
+    }
+    
+    idcounter deserializeID(std::string binaryString){
+        
     }
     
     UserProfile deserialize(std::string serializeString){        

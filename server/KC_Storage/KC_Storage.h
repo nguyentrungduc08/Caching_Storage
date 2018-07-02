@@ -15,6 +15,7 @@ namespace KC_Storage {
 class KC_StorageIf {
  public:
   virtual ~KC_StorageIf() {}
+  virtual int32_t totalRecord() = 0;
   virtual void get(std::string& _return, const std::string& key) = 0;
   virtual bool put(const std::string& key, const std::string& value, const putOption::type opt) = 0;
   virtual bool remove(const std::string& key) = 0;
@@ -47,6 +48,10 @@ class KC_StorageIfSingletonFactory : virtual public KC_StorageIfFactory {
 class KC_StorageNull : virtual public KC_StorageIf {
  public:
   virtual ~KC_StorageNull() {}
+  int32_t totalRecord() {
+    int32_t _return = 0;
+    return _return;
+  }
   void get(std::string& /* _return */, const std::string& /* key */) {
     return;
   }
@@ -58,6 +63,100 @@ class KC_StorageNull : virtual public KC_StorageIf {
     bool _return = false;
     return _return;
   }
+};
+
+
+class KC_Storage_totalRecord_args {
+ public:
+
+  KC_Storage_totalRecord_args() {
+  }
+
+  virtual ~KC_Storage_totalRecord_args() throw() {}
+
+
+  bool operator == (const KC_Storage_totalRecord_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const KC_Storage_totalRecord_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const KC_Storage_totalRecord_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class KC_Storage_totalRecord_pargs {
+ public:
+
+
+  virtual ~KC_Storage_totalRecord_pargs() throw() {}
+
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _KC_Storage_totalRecord_result__isset {
+  _KC_Storage_totalRecord_result__isset() : success(false) {}
+  bool success;
+} _KC_Storage_totalRecord_result__isset;
+
+class KC_Storage_totalRecord_result {
+ public:
+
+  KC_Storage_totalRecord_result() : success(0) {
+  }
+
+  virtual ~KC_Storage_totalRecord_result() throw() {}
+
+  int32_t success;
+
+  _KC_Storage_totalRecord_result__isset __isset;
+
+  void __set_success(const int32_t val) {
+    success = val;
+  }
+
+  bool operator == (const KC_Storage_totalRecord_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const KC_Storage_totalRecord_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const KC_Storage_totalRecord_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _KC_Storage_totalRecord_presult__isset {
+  _KC_Storage_totalRecord_presult__isset() : success(false) {}
+  bool success;
+} _KC_Storage_totalRecord_presult__isset;
+
+class KC_Storage_totalRecord_presult {
+ public:
+
+
+  virtual ~KC_Storage_totalRecord_presult() throw() {}
+
+  int32_t* success;
+
+  _KC_Storage_totalRecord_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 typedef struct _KC_Storage_get_args__isset {
@@ -422,6 +521,9 @@ class KC_StorageClient : virtual public KC_StorageIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  int32_t totalRecord();
+  void send_totalRecord();
+  int32_t recv_totalRecord();
   void get(std::string& _return, const std::string& key);
   void send_get(const std::string& key);
   void recv_get(std::string& _return);
@@ -446,12 +548,14 @@ class KC_StorageProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (KC_StorageProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_totalRecord(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_get(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_put(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_remove(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   KC_StorageProcessor(boost::shared_ptr<KC_StorageIf> iface) :
     iface_(iface) {
+    processMap_["totalRecord"] = &KC_StorageProcessor::process_totalRecord;
     processMap_["get"] = &KC_StorageProcessor::process_get;
     processMap_["put"] = &KC_StorageProcessor::process_put;
     processMap_["remove"] = &KC_StorageProcessor::process_remove;
@@ -483,6 +587,15 @@ class KC_StorageMultiface : virtual public KC_StorageIf {
     ifaces_.push_back(iface);
   }
  public:
+  int32_t totalRecord() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->totalRecord();
+    }
+    return ifaces_[i]->totalRecord();
+  }
+
   void get(std::string& _return, const std::string& key) {
     size_t sz = ifaces_.size();
     size_t i = 0;
