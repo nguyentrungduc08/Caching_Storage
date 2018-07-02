@@ -72,9 +72,9 @@ public:
         putOption::type putType = putOption::type::add;
         ++_idCounter;
         usert.__set_uid(_idCounter);
-        _UserData[_idCounter] = usert;
-        
-        std::string sid = std::to_string(_idCounter);
+
+        std::string binaryString = serializeI(_idCounter);
+        std::string sid = binaryString;
         std::string serialized_string = this->serialize(usert);
         
         boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
@@ -90,9 +90,7 @@ public:
             std::cerr << "ERROR: " << tx.what() << std::endl;
         }
         
-        db.set(sid, serialized_string);
-      
-//        std::cout << "object user: [ " << serialized_string << "]" << std::endl;
+//        db.set(sid, serialized_string);
         
         return _idCounter;
     }
@@ -102,27 +100,11 @@ public:
         printf("getUser\n");
         UserProfile tmp;
         tmp.__set_uid(-1);
-
-//        Task1::Users::iterator it;
-//        it = _UserData.find(uid);
-//        if (it != _UserData.end()){
-//            _return = it->second;
-//            //return;
-//        }
         
-        //using KC
-//        std::string sid = std::to_string(uid);
-//        std::string raw;
-//        bool isFound = db.get(sid, &raw);
-//        if (isFound){
-//            UserProfile tmpUser = deserialize(raw);
-//            _return = tmpUser;
-//        } else {
-//            _return = tmp;
-//        }
-        
+        std::string binaryString = serializeI(uid);
+        std::cout << "out: " << binaryString << std::endl;
         //connect KC_service
-        std::string sid = std::to_string(uid);
+        std::string sid = binaryString;
         std::string raw;
         
         boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
@@ -147,7 +129,6 @@ public:
             std::cerr << "ERROR: " << tx.what() << std::endl;
         }
         
-        
     }
 
     int32_t editUser(const int32_t uid, const UserProfile& user) {
@@ -155,14 +136,14 @@ public:
         std::cout << "uid from client " << uid << std::endl;
         printf("editUser \n");
         
-        Task1::Users::iterator it;
-        it = _UserData.find(uid);
-        if (it != _UserData.end()){
-            it->second.name     = user.name;
-            it->second.age      = user.age;
-            it->second.gender   = user.gender;
-            return it->second.uid;
-        }
+//        Task1::Users::iterator it;
+//        it = _UserData.find(uid);
+//        if (it != _UserData.end()){
+//            it->second.name     = user.name;
+//            it->second.age      = user.age;
+//            it->second.gender   = user.gender;
+//            return it->second.uid;
+//        }
         
         std::string sid = std::to_string(uid);
         std::string raw;
@@ -185,14 +166,11 @@ public:
         return serialized_string;
     }
 
-    std::string serilize(const idcounter & uid){
-        shared_ptr<TMemoryBuffer> transportOut(new TMemoryBuffer());
-        shared_ptr<TBinaryProtocol> protocolOut(new TBinaryProtocol(transportOut));
-        
-        // protocolOut.writeI32(uid);
-//        uid.write(protocolOut.get());
-//        std::string serialized_string = transportOut->getBufferAsString();
-//        return serialized_string;   
+    std::string serializeI(idcounter uid){
+        std::string binaryString(4,'\n'); 
+        for (int i = 0; i < 4; i++)
+            binaryString[3 - i] = (uid >> (i * 8));
+        return binaryString;
     }
     
     UserProfile deserialize(std::string serializeString){        
@@ -222,25 +200,6 @@ int main(int argc, char **argv) {
 //    runTNonblockingServer();
     
     return 0;
-}
-
-void 
-runKCDatabaseService()
-{
-    boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-	UserStorageClient client(protocol);
-
-    try {
-        transport->open();
-
-        transport->close();
-    } catch (TException &tx){
-        std::cerr << "Error: " << tx.what() << std::endl;
-    }
-
-    return;
 }
 
 void 

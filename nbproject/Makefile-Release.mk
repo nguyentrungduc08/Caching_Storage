@@ -43,6 +43,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/server/user_profile_constants.o \
 	${OBJECTDIR}/server/user_profile_types.o
 
+# Test Directory
+TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
+
+# Test Files
+TESTFILES= \
+	${TESTDIR}/TestFiles/f1
 
 # C Compiler Flags
 CFLAGS=
@@ -105,6 +111,119 @@ ${OBJECTDIR}/server/user_profile_types.o: server/user_profile_types.cpp
 
 # Subprojects
 .build-subprojects:
+
+# Build Test Targets
+.build-tests-conf: .build-conf ${TESTFILES}
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/newsimpletest.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
+
+
+${TESTDIR}/tests/newsimpletest.o: tests/newsimpletest.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
+
+
+${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o: ${OBJECTDIR}/server/KC_Storage/KC_Storage.o server/KC_Storage/KC_Storage.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_Storage/KC_Storage.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o server/KC_Storage/KC_Storage.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_Storage/KC_Storage.o ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o: ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o server/KC_Storage/kc_storage_constants.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o server/KC_Storage/kc_storage_constants.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o: ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o server/KC_Storage/kc_storage_types.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o server/KC_Storage/kc_storage_types.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/UserStorage_nomain.o: ${OBJECTDIR}/server/UserStorage.o server/UserStorage.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/UserStorage.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorage_nomain.o server/UserStorage.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/UserStorage.o ${OBJECTDIR}/server/UserStorage_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/server_nomain.o: ${OBJECTDIR}/server/server.o server/server.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/server.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/server_nomain.o server/server.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/server.o ${OBJECTDIR}/server/server_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/user_profile_constants_nomain.o: ${OBJECTDIR}/server/user_profile_constants.o server/user_profile_constants.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/user_profile_constants.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_constants_nomain.o server/user_profile_constants.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/user_profile_constants.o ${OBJECTDIR}/server/user_profile_constants_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/user_profile_types_nomain.o: ${OBJECTDIR}/server/user_profile_types.o server/user_profile_types.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/user_profile_types.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_types_nomain.o server/user_profile_types.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/user_profile_types.o ${OBJECTDIR}/server/user_profile_types_nomain.o;\
+	fi
+
+# Run Test Targets
+.test-conf:
+	@if [ "${TEST}" = "" ]; \
+	then  \
+	    ${TESTDIR}/TestFiles/f1 || true; \
+	else  \
+	    ./${TEST} || true; \
+	fi
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
