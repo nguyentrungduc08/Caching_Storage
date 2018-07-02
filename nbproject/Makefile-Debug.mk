@@ -35,6 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/server/KC_Storage/KC_Storage.o \
+	${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o \
+	${OBJECTDIR}/server/KC_Storage/kc_storage_types.o \
 	${OBJECTDIR}/server/UserStorage.o \
 	${OBJECTDIR}/server/server.o \
 	${OBJECTDIR}/server/user_profile_constants.o \
@@ -64,6 +67,21 @@ LDLIBSOPTIONS=-lthrift -lpthread
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS} -lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc
+
+${OBJECTDIR}/server/KC_Storage/KC_Storage.o: server/KC_Storage/KC_Storage.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage.o server/KC_Storage/KC_Storage.cpp
+
+${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o: server/KC_Storage/kc_storage_constants.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o server/KC_Storage/kc_storage_constants.cpp
+
+${OBJECTDIR}/server/KC_Storage/kc_storage_types.o: server/KC_Storage/kc_storage_types.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o server/KC_Storage/kc_storage_types.cpp
 
 ${OBJECTDIR}/server/UserStorage.o: server/UserStorage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server

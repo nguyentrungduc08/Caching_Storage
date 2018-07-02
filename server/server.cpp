@@ -3,17 +3,24 @@
 #include "UserStorage.h"
 #include <thrift/protocol/TBinaryProtocol.h>
 
+
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/server/TNonblockingServer.h>
 #include <thrift/server/TThreadPoolServer.h>
 #include <thrift/server/TThreadedServer.h>
 
+#include <thrift/transport/TSocket.h>  
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/concurrency/PosixThreadFactory.h>
 #include <thrift/transport/TBufferTransports.h>
+#include <thrift/transport/TTransportUtils.h>
+
+#include <boost/make_shared.hpp>
 
 //Kyoto Cabinet database
 #include <kchashdb.h>
+
+#include "KC_Storage/KC_Storage.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -24,6 +31,7 @@ using namespace ::apache::thrift::concurrency;
 using boost::shared_ptr;
 
 using namespace  ::Task1;
+using namespace  ::KC_Storage;
 using namespace kyotocabinet;
 
 Task1::listUser     _listUsers;
@@ -33,22 +41,24 @@ Task1::idcounter    _idCounter = 0;
 class UserStorageHandler : virtual public UserStorageIf {
 private:
     HashDB db;
-    
+//    shared_ptr<KC_StorageClient> KCClient;
+//    shared_ptr<TTransport> transport;
 public:
     UserStorageHandler() {
         // Your initialization goes here
         std::cout << "Server Starting........." <<std::endl;
         std::cout << std::endl;
         
-        if (db.open("db.kch", HashDB::OWRITER | HashDB::OCREATE)) {
+        if (this->db.open("db.kch", HashDB::OWRITER | HashDB::OCREATE)) {
             std::cout << "open KC database success" << std::endl; 
         } else {
             std::cerr << "open error: " << db.error().name() << std::endl; 
         }
+
     }
     
     ~UserStorageHandler() {
-        if (db.close()) {
+        if (this->db.close()) {
             std::cout << "close KC database success" << std::endl;
         } else {
             std::cerr << "close error: " << db.error().name() << std::endl;
@@ -59,18 +69,29 @@ public:
         // Your implementation goes here
         printf("createUser\n");
         UserProfile usert = user;
+        putOption::type putType = putOption::type::add;
         ++_idCounter;
         usert.__set_uid(_idCounter);
-        
         _UserData[_idCounter] = usert;
         
         std::string sid = std::to_string(_idCounter);
-        
-//        std::cout << "total user: " << _UserData.size() << std::endl;
         std::string serialized_string = this->serialize(usert);
         
-        db.set(sid, serialized_string);
+        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
+        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+        KC_StorageClient KCClinet (protocol);
         
+        try {
+            transport->open();
+            bool ok = KCClinet.put(sid, serialized_string, putType);
+            transport->close();
+        } catch (TException &tx){
+            std::cerr << "ERROR: " << tx.what() << std::endl;
+        }
+        
+        db.set(sid, serialized_string);
+      
 //        std::cout << "object user: [ " << serialized_string << "]" << std::endl;
         
         return _idCounter;
@@ -90,20 +111,43 @@ public:
 //        }
         
         //using KC
+//        std::string sid = std::to_string(uid);
+//        std::string raw;
+//        bool isFound = db.get(sid, &raw);
+//        if (isFound){
+//            UserProfile tmpUser = deserialize(raw);
+//            _return = tmpUser;
+//        } else {
+//            _return = tmp;
+//        }
+        
+        //connect KC_service
         std::string sid = std::to_string(uid);
         std::string raw;
-        bool isFound = db.get(sid, &raw);
-        if (isFound){
-            //std::cout << "get data form db" << raw << std::endl;
-            UserProfile tmpUser = deserialize(raw);
-            //std::cout << "uid db: " << tmpUser.uid << std::endl;
-            //std::cout << "name db: " << tmpUser.name << std::endl;
-            //std::cout << "age db: " << tmpUser.age << std::endl;
-            //std::cout << "gender db: " << tmpUser.gender << std::endl;
-            _return = tmpUser;
-        } else {
-            _return = tmp;
+        
+        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
+        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+        KC_StorageClient KCClinet (protocol);
+        
+        try {
+            transport->open();
+            KCClinet.get(raw, sid);
+            if (raw != ""){
+                UserProfile tmpUser = deserialize(raw);
+                _return = tmpUser;
+                std::cout << "tmpuser name: " << tmpUser.name << std::endl;
+                std::cout << "tmpuser id: " << tmpUser.uid << std::endl;
+            } else { 
+                _return = tmp;
+            }
+            
+            transport->close();
+        } catch (TException &tx){
+            std::cerr << "ERROR: " << tx.what() << std::endl;
         }
+        
+        
     }
 
     int32_t editUser(const int32_t uid, const UserProfile& user) {
@@ -139,6 +183,16 @@ public:
         obj.write(protocolOut.get());
         std::string serialized_string = transportOut->getBufferAsString();
         return serialized_string;
+    }
+
+    std::string serilize(const idcounter & uid){
+        shared_ptr<TMemoryBuffer> transportOut(new TMemoryBuffer());
+        shared_ptr<TBinaryProtocol> protocolOut(new TBinaryProtocol(transportOut));
+        
+        // protocolOut.writeI32(uid);
+//        uid.write(protocolOut.get());
+//        std::string serialized_string = transportOut->getBufferAsString();
+//        return serialized_string;   
     }
     
     UserProfile deserialize(std::string serializeString){        
