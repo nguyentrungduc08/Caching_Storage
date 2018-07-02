@@ -33,6 +33,7 @@ Task1::idcounter    _idCounter = 0;
 class UserStorageHandler : virtual public UserStorageIf {
 private:
     HashDB db;
+    
 public:
     UserStorageHandler() {
         // Your initialization goes here
@@ -157,6 +158,7 @@ void        runTSimpleServer();
 void        runTNonblockingServer();
 void        runTThreadPoolServer();
 void        runTThreadedServer();
+void        runKCDatabaseService();
 
 int main(int argc, char **argv) {
    
@@ -166,6 +168,25 @@ int main(int argc, char **argv) {
 //    runTNonblockingServer();
     
     return 0;
+}
+
+void 
+runKCDatabaseService()
+{
+    boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
+    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+	UserStorageClient client(protocol);
+
+    try {
+        transport->open();
+
+        transport->close();
+    } catch (TException &tx){
+        std::cerr << "Error: " << tx.what() << std::endl;
+    }
+
+    return;
 }
 
 void 
