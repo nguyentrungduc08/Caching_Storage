@@ -21,7 +21,7 @@ struct putOption {
   enum type {
     add = 0,
     update = 1,
-    remove = 2
+    overide = 2
   };
 };
 

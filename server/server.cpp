@@ -61,6 +61,7 @@ public:
             transport->close();
         } catch (TException &tx){
             std::cerr << "ERROR: " << tx.what() << std::endl;
+            exit(0);
         }
         
     }
@@ -93,8 +94,6 @@ public:
         } catch (TException &tx){
             std::cerr << "ERROR: " << tx.what() << std::endl;
         }
-        
-//        db.set(sid, serialized_string);
         
         return _idCounter;
     }
@@ -132,32 +131,39 @@ public:
         } catch (TException &tx){
             std::cerr << "ERROR: " << tx.what() << std::endl;
         }
-        
     }
 
     int32_t editUser(const int32_t uid, const UserProfile& user) {
-        // Your implementation goes here
-        std::cout << "uid from client " << uid << std::endl;
         printf("editUser \n");
+        UserProfile uProfile = user; 
+        putOption::type opt = putOption::update;
+
+        std::string binaryString = serialize(uid);
+        std::string sid = binaryString;
+        std::string serialized_string = this->serialize(uProfile);
         
-//        Task1::Users::iterator it;
-//        it = _UserData.find(uid);
-//        if (it != _UserData.end()){
-//            it->second.name     = user.name;
-//            it->second.age      = user.age;
-//            it->second.gender   = user.gender;
-//            return it->second.uid;
-//        }
+        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
+        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+        KC_StorageClient KCClient(protocol);
         
-        std::string sid = std::to_string(uid);
-        std::string raw;
-        bool isFound = db.get(sid, &raw);
-        if (isFound){
-            UserProfile up = user;
-            raw = serialize(up);
-            db.set(sid, raw);    
-            return uid;
+        try {
+            transport->open();
+            bool ok = KCClient.put(sid, serialized_string, opt);
+            if (ok) {
+                return uid;
+            }
+            transport->close();
+        } catch (TEOFException &tx){
+            std::cerr << "ERROR: " << tx.what() << std::endl;
         }
+//        bool isFound = db.get(sid, &raw);
+//        if (isFound){
+//            UserProfile up = user;
+//            raw = serialize(up);
+//            db.set(sid, raw);    
+//            return uid;
+//        }
         
         return -1;
     }

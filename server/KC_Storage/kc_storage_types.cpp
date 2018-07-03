@@ -13,12 +13,12 @@ namespace KC_Storage {
 int _kputOptionValues[] = {
   putOption::add,
   putOption::update,
-  putOption::remove
+  putOption::overide
 };
 const char* _kputOptionNames[] = {
   "add",
   "update",
-  "remove"
+  "overide"
 };
 const std::map<int, const char*> _putOption_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(3, _kputOptionValues, _kputOptionNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
 
