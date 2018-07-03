@@ -57,6 +57,7 @@ public:
         try {
             transport->open();
             int nu = KCClinet.totalRecord();
+            _idCounter = nu;
             std::cout << "total user's profile " << nu << std::endl;
             transport->close();
         } catch (TException &tx){
