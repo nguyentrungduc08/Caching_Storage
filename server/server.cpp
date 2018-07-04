@@ -22,6 +22,8 @@
 
 #include "KC_Storage/KC_Storage.h"
 
+#include "KC_GenID/WZ_GenIdService.h"
+
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
@@ -54,16 +56,20 @@ public:
         boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
         KC_StorageClient KCClinet (protocol);
         
-        try {
-            transport->open();
-            int nu = KCClinet.totalRecord();
-            _idCounter = nu;
-            std::cout << "total user's profile " << nu << std::endl;
-            transport->close();
-        } catch (TException &tx){
-            std::cerr << "ERROR: " << tx.what() << std::endl;
-            exit(0);
-        }
+//        try {
+//            transport->open();
+//            int nu = KCClinet.totalRecord();
+//            _idCounter = nu;
+//            std::cout << "total user's profile " << nu << std::endl;
+//            transport->close();
+//        } catch (TException &tx){
+//            std::cerr << "ERROR: " << tx.what() << std::endl;
+//            exit(0);
+//        }
+        
+        WZ_GenIdService wzGenID;
+        std::cout << "Id generate form service:  " << wzGenID.W_genID("test") << std::endl;
+        
         
     }
     
