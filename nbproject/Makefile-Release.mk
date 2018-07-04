@@ -35,6 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/server/KC_GenID/KC_GenID.o \
+	${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o \
+	${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o \
+	${OBJECTDIR}/server/KC_GenID/kc_genid_types.o \
 	${OBJECTDIR}/server/KC_Storage/KC_Storage.o \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_types.o \
@@ -73,6 +77,26 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/server/KC_GenID/KC_GenID.o: server/KC_GenID/KC_GenID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/KC_GenID.o server/KC_GenID/KC_GenID.cpp
+
+${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o: server/KC_GenID/WZ_GenIdService.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o server/KC_GenID/WZ_GenIdService.cpp
+
+${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o: server/KC_GenID/kc_genid_constants.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o server/KC_GenID/kc_genid_constants.cpp
+
+${OBJECTDIR}/server/KC_GenID/kc_genid_types.o: server/KC_GenID/kc_genid_types.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o server/KC_GenID/kc_genid_types.cpp
 
 ${OBJECTDIR}/server/KC_Storage/KC_Storage.o: server/KC_Storage/KC_Storage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
@@ -124,6 +148,58 @@ ${TESTDIR}/tests/newsimpletest.o: tests/newsimpletest.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
 
+
+${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o: ${OBJECTDIR}/server/KC_GenID/KC_GenID.o server/KC_GenID/KC_GenID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_GenID/KC_GenID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o server/KC_GenID/KC_GenID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_GenID/KC_GenID.o ${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/KC_GenID/WZ_GenIdService_nomain.o: ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o server/KC_GenID/WZ_GenIdService.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService_nomain.o server/KC_GenID/WZ_GenIdService.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/KC_GenID/kc_genid_constants_nomain.o: ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o server/KC_GenID/kc_genid_constants.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants_nomain.o server/KC_GenID/kc_genid_constants.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/KC_GenID/kc_genid_types_nomain.o: ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o server/KC_GenID/kc_genid_types.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_types_nomain.o server/KC_GenID/kc_genid_types.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o ${OBJECTDIR}/server/KC_GenID/kc_genid_types_nomain.o;\
+	fi
 
 ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o: ${OBJECTDIR}/server/KC_Storage/KC_Storage.o server/KC_Storage/KC_Storage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
