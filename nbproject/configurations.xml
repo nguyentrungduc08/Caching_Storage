@@ -15,6 +15,12 @@
         <itemPath>server/KC_Storage/kc_storage_constants.h</itemPath>
         <itemPath>server/KC_Storage/kc_storage_types.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f3" displayName="StorageService" projectFiles="true">
+        <itemPath>server/Storage/KC_Storage.h</itemPath>
+        <itemPath>server/Storage/WZ_StorageService.h</itemPath>
+        <itemPath>server/Storage/kc_storage_constants.h</itemPath>
+        <itemPath>server/Storage/kc_storage_types.h</itemPath>
+      </logicalFolder>
       <itemPath>server/UserStorage.h</itemPath>
       <itemPath>server/user_profile_constants.h</itemPath>
       <itemPath>server/user_profile_types.h</itemPath>
@@ -32,6 +38,12 @@
         <itemPath>server/KC_Storage/KC_Storage.cpp</itemPath>
         <itemPath>server/KC_Storage/kc_storage_constants.cpp</itemPath>
         <itemPath>server/KC_Storage/kc_storage_types.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="StorageService" projectFiles="true">
+        <itemPath>server/Storage/KC_Storage.cpp</itemPath>
+        <itemPath>server/Storage/WZ_StorageService.cpp</itemPath>
+        <itemPath>server/Storage/kc_storage_constants.cpp</itemPath>
+        <itemPath>server/Storage/kc_storage_types.cpp</itemPath>
       </logicalFolder>
       <itemPath>server/UserStorage.cpp</itemPath>
       <itemPath>server/user_profile_constants.cpp</itemPath>
@@ -148,6 +160,34 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="server/Storage/KC_Storage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="server/Storage/KC_Storage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/Storage/WZ_StorageService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/WZ_StorageService.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_constants.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_constants.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_types.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_types.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="server/UserStorage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="server/UserStorage.h" ex="false" tool="3" flavor2="0">
@@ -248,6 +288,34 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="server/Storage/KC_Storage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="server/Storage/KC_Storage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/Storage/WZ_StorageService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/WZ_StorageService.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_constants.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_constants.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_types.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="server/Storage/kc_storage_types.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="server/UserStorage.cpp" ex="false" tool="1" flavor2="0">
       </item>

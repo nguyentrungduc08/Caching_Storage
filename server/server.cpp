@@ -43,8 +43,7 @@ Task1::idcounter    _idCounter = 0;
 class UserStorageHandler : virtual public UserStorageIf {
 private:
 //    HashDB db;
-//    shared_ptr<KC_StorageClient> KCClient;
-//    shared_ptr<TTransport> transport;
+
 public:
     UserStorageHandler() {
         // Your initialization goes here

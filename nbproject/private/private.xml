@@ -7,12 +7,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/WZ_GenIdService.h</file>
-            <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/WZ_GenIdService.cpp</file>
+            <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/server/Storage/WZ_StorageService.cpp</file>
+            <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/server/Storage/WZ_StorageService.h</file>
             <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/server/server.cpp</file>
-            <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/server/KC_GenID/KC_GenID.h</file>
-            <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/WZ_StorageService.h</file>
-            <file>file:/home/cpu10664-local/NetBeansProjects/Probation/Task1/WZ_StorageService.cpp</file>
         </group>
     </open-files>
 </project-private>
