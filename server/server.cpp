@@ -20,9 +20,9 @@
 //Kyoto Cabinet database
 #include <kchashdb.h>
 
-#include "KC_Storage/KC_Storage.h"
-
 #include "KC_GenID/WZ_GenIdService.h"
+#include "KC_Storage/WZ_StorageService.h"
+#include "KC_Storage/KC_Storage.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -32,48 +32,32 @@ using namespace ::apache::thrift::concurrency;
 
 using boost::shared_ptr;
 
-using namespace  ::Task1;
-using namespace  ::KC_Storage;
+using namespace ::Task1;
+//using namespace  ::KC_Storage;
 using namespace kyotocabinet;
 
-Task1::listUser     _listUsers;
-Task1::Users        _UserData;
-Task1::idcounter    _idCounter = 0;
+Task1::listUser _listUsers;
+Task1::Users _UserData;
+Task1::idcounter _idCounter = 0;
 
 class UserStorageHandler : virtual public UserStorageIf {
 private:
-//    HashDB db;
+    //    HashDB db;
 
 public:
+
     UserStorageHandler() {
         // Your initialization goes here
-        std::cout << "Server Starting........." <<std::endl;
+        std::cout << "Server Starting........." << std::endl;
         std::cout << std::endl;
-        
-        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-        KC_StorageClient KCClinet (protocol);
-        
-//        try {
-//            transport->open();
-//            int nu = KCClinet.totalRecord();
-//            _idCounter = nu;
-//            std::cout << "total user's profile " << nu << std::endl;
-//            transport->close();
-//        } catch (TException &tx){
-//            std::cerr << "ERROR: " << tx.what() << std::endl;
-//            exit(0);
-//        }
-        
-        WZ_GenIdService wzGenID;
-        std::cout << "Id generate form service:  " << wzGenID.W_genID("test") << std::endl;
-        
-        
+
+        //        WZ_GenIdService wzGenID;
+        //        std::cout << "Id generate form service:  " << wzGenID.W_genID("test") << std::endl;
+
     }
-    
+
     ~UserStorageHandler() {
-        
+        std::cout << "Server shutdown!!! " << std::endl;
     }
 
     int32_t createUser(const UserProfile& user) {
@@ -81,27 +65,25 @@ public:
         printf("createUser\n");
         UserProfile usert = user;
         putOption::type putType = putOption::type::add;
-        ++_idCounter;
-        usert.__set_uid(_idCounter);
+        WZ_GenIdService wzGenId;
+        int zId = wzGenId.W_genID("test");
 
-        std::string binaryString = serialize(_idCounter);
+        usert.__set_uid(zId);
+        this->showProfile(usert);
+
+        std::string binaryString = serialize(zId);
         std::string sid = binaryString;
         std::string serialized_string = this->serialize(usert);
-        
-        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-        KC_StorageClient KCClinet (protocol);
-        
-        try {
-            transport->open();
-            bool ok = KCClinet.put(sid, serialized_string, putType);
-            transport->close();
-        } catch (TException &tx){
-            std::cerr << "ERROR: " << tx.what() << std::endl;
+
+        WZ_StorageService wzStorage;
+        KC_Storage::putOption::type opt = KC_Storage::putOption::type::add;
+        bool ok = wzStorage.W_put(sid, serialized_string, opt);
+        if (ok) {
+            std::cout << "Store user's profile success" << std::endl;
+            return zId;
+        } else {
+            return -1;
         }
-        
-        return _idCounter;
     }
 
     void getUser(UserProfile& _return, const int32_t uid) {
@@ -109,71 +91,41 @@ public:
         printf("getUser\n");
         UserProfile tmp;
         tmp.__set_uid(-1);
-        
+
         std::string binaryString = serialize(uid);
-        std::cout << "out: " << binaryString << std::endl;
-        //connect KC_service
         std::string sid = binaryString;
         std::string raw;
-        
-        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-        KC_StorageClient KCClinet (protocol);
-        
-        try {
-            transport->open();
-            KCClinet.get(raw, sid);
-            if (raw != ""){
-                UserProfile tmpUser = deserialize(raw);
-                _return = tmpUser;
-                std::cout << "tmpuser name: " << tmpUser.name << std::endl;
-                std::cout << "tmpuser id: " << tmpUser.uid << std::endl;
-            } else { 
-                _return = tmp;
-            }
-            
-            transport->close();
-        } catch (TException &tx){
-            std::cerr << "ERROR: " << tx.what() << std::endl;
+
+        WZ_StorageService wzStorage;
+        raw = wzStorage.W_get(sid);
+        if (raw != "") {
+            UserProfile tmpUser = deserialize(raw);
+            _return = tmpUser;
+            this->showProfile(tmpUser);
+        } else {
+            _return = tmp;
         }
+
     }
 
     int32_t editUser(const int32_t uid, const UserProfile& user) {
         printf("editUser \n");
-        UserProfile uProfile = user; 
-        putOption::type opt = putOption::update;
+        UserProfile uProfile = user;
 
         std::string binaryString = serialize(uid);
         std::string sid = binaryString;
         std::string serialized_string = this->serialize(uProfile);
-        
-        boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-        boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-        boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-        KC_StorageClient KCClient(protocol);
-        
-        try {
-            transport->open();
-            bool ok = KCClient.put(sid, serialized_string, opt);
-            if (ok) {
-                return uid;
-            }
-            transport->close();
-        } catch (TEOFException &tx){
-            std::cerr << "ERROR: " << tx.what() << std::endl;
+
+        KC_Storage::putOption::type opt = KC_Storage::putOption::type::update;
+        WZ_StorageService wzStorage;
+        bool ok = wzStorage.W_put(sid, serialized_string, opt);
+        this->showProfile(uProfile);
+        if (ok){
+            return uid;
         }
-//        bool isFound = db.get(sid, &raw);
-//        if (isFound){
-//            UserProfile up = user;
-//            raw = serialize(up);
-//            db.set(sid, raw);    
-//            return uid;
-//        }
-        
         return -1;
     }
-    
+
     std::string serialize(UserProfile& obj) {
         shared_ptr<TMemoryBuffer> transportOut(new TMemoryBuffer());
         shared_ptr<TBinaryProtocol> protocolOut(new TBinaryProtocol(transportOut));
@@ -182,115 +134,123 @@ public:
         return serialized_string;
     }
 
-    std::string serialize(idcounter uid){
-        std::string binaryString(4,'\n'); 
+    std::string serialize(idcounter uid) {
+        std::string binaryString(4, '\n');
         for (int i = 0; i < 4; i++)
             binaryString[3 - i] = (uid >> (i * 8));
         return binaryString;
     }
-    
-    idcounter deserializeID(std::string binaryString){
-        
+
+    idcounter deserializeID(std::string binaryString) {
+
     }
-    
-    UserProfile deserialize(std::string serializeString){        
+
+    UserProfile deserialize(std::string serializeString) {
         shared_ptr<TMemoryBuffer> strBuffer(new TMemoryBuffer());
         shared_ptr<TBinaryProtocol> binaryProtcol(new TBinaryProtocol(strBuffer));
 
-        strBuffer->resetBuffer((uint8_t*)serializeString.data(), static_cast<uint32_t>(serializeString.length()));
+        strBuffer->resetBuffer((uint8_t*) serializeString.data(), static_cast<uint32_t> (serializeString.length()));
         UserProfile user;
         user.read(binaryProtcol.get());
         return user;
     }
-    
+
+private:
+
+    void showProfile(const UserProfile& profile) {
+        std::cout << "Detail User's Profile" << std::endl;
+        std::cout << "- UId: " << profile.uid << std::endl;
+        std::cout << "- Name: " << profile.name << std::endl;
+        std::cout << "- age: " << profile.age << std::endl;
+        std::cout << "- gender: " << profile.gender << std::endl;
+    }
+
 };
 
 
-void        runTSimpleServer();
-void        runTNonblockingServer();
-void        runTThreadPoolServer();
-void        runTThreadedServer();
-void        runKCDatabaseService();
+void runTSimpleServer();
+void runTNonblockingServer();
+void runTThreadPoolServer();
+void runTThreadedServer();
+void runKCDatabaseService();
 
 int main(int argc, char **argv) {
-   
+
     runTSimpleServer();
-//    runTThreadedServer();
-//    runTThreadPoolServer();
-//    runTNonblockingServer();
-    
+    //    runTThreadedServer();
+    //    runTThreadPoolServer();
+    //    runTNonblockingServer();
+
     return 0;
 }
 
-void 
-runTSimpleServer(){
+void
+runTSimpleServer() {
     std::cout << "runTSimpleServer" << std::endl;
     int port = 9090;
-    shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
-    shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
-    shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
-    shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
-    shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory()); 
-    
+    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
+    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
+    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
     TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
     server.serve();
-    
+
     return;
 }
 
-void 
-runTThreadedServer(){
+void
+runTThreadedServer() {
     std::cout << "runTThreadedServer" << std::endl;
     int port = 9090;
-    shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
-    shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
-    shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
-    shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
-    shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory()); 
-    
+    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
+    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
+    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
     TThreadedServer server(processor, serverTransport, transportFactory, protocolFactory);
     server.serve();
-    
+
     return;
 }
 
-void 
-runTThreadPoolServer()
-{
+void
+runTThreadPoolServer() {
     std::cout << "runTThreadPoolServer" << std::endl;
     int port = 9090;
-    shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
-    shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
-    shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
-    shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
-    shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory()); 
-    
+    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
+    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
+    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
     shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(15);
     shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
     threadManager->threadFactory(threadFactory);
     threadManager->start();
-    
+
     TThreadPoolServer server(processor, serverTransport, transportFactory, protocolFactory, threadManager);
     server.serve();
     return;
 }
 
-
-void        
-runTNonblockingServer(){
+void
+runTNonblockingServer() {
     std::cout << "runTNonblockingServer" << std::endl;
     int port = 9090;
-    shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
-    shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
-    shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
-    shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
-    shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory()); 
-    
+    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
+    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
+    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
     shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(15);
     shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
     threadManager->threadFactory(threadFactory);
     threadManager->start();
-    
+
     TNonblockingServer server(processor, protocolFactory, port, threadManager);
     server.serve();
     return;

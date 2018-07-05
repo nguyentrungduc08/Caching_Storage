@@ -74,8 +74,8 @@ uint32_t KC_Storage_totalRecord_result::read(::apache::thrift::protocol::TProtoc
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->success);
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -100,8 +100,8 @@ uint32_t KC_Storage_totalRecord_result::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeStructBegin("KC_Storage_totalRecord_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
-    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -130,8 +130,8 @@ uint32_t KC_Storage_totalRecord_presult::read(::apache::thrift::protocol::TProto
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -236,8 +236,8 @@ uint32_t KC_Storage_get_result::read(::apache::thrift::protocol::TProtocol* ipro
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->success);
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -262,8 +262,8 @@ uint32_t KC_Storage_get_result::write(::apache::thrift::protocol::TProtocol* opr
   xfer += oprot->writeStructBegin("KC_Storage_get_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
-    xfer += oprot->writeString(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -292,8 +292,8 @@ uint32_t KC_Storage_get_presult::read(::apache::thrift::protocol::TProtocol* ipr
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -432,8 +432,8 @@ uint32_t KC_Storage_put_result::read(::apache::thrift::protocol::TProtocol* ipro
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->success);
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -458,8 +458,8 @@ uint32_t KC_Storage_put_result::write(::apache::thrift::protocol::TProtocol* opr
   xfer += oprot->writeStructBegin("KC_Storage_put_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
-    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -488,8 +488,8 @@ uint32_t KC_Storage_put_presult::read(::apache::thrift::protocol::TProtocol* ipr
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -594,8 +594,8 @@ uint32_t KC_Storage_remove_result::read(::apache::thrift::protocol::TProtocol* i
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->success);
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -620,8 +620,8 @@ uint32_t KC_Storage_remove_result::write(::apache::thrift::protocol::TProtocol* 
   xfer += oprot->writeStructBegin("KC_Storage_remove_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
-    xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -650,8 +650,8 @@ uint32_t KC_Storage_remove_presult::read(::apache::thrift::protocol::TProtocol* 
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -669,10 +669,10 @@ uint32_t KC_Storage_remove_presult::read(::apache::thrift::protocol::TProtocol* 
   return xfer;
 }
 
-int32_t KC_StorageClient::totalRecord()
+void KC_StorageClient::totalRecord(Z_total& _return)
 {
   send_totalRecord();
-  return recv_totalRecord();
+  recv_totalRecord(_return);
 }
 
 void KC_StorageClient::send_totalRecord()
@@ -688,7 +688,7 @@ void KC_StorageClient::send_totalRecord()
   oprot_->getTransport()->flush();
 }
 
-int32_t KC_StorageClient::recv_totalRecord()
+void KC_StorageClient::recv_totalRecord(Z_total& _return)
 {
 
   int32_t rseqid = 0;
@@ -713,7 +713,6 @@ int32_t KC_StorageClient::recv_totalRecord()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  int32_t _return;
   KC_Storage_totalRecord_presult result;
   result.success = &_return;
   result.read(iprot_);
@@ -721,12 +720,13 @@ int32_t KC_StorageClient::recv_totalRecord()
   iprot_->getTransport()->readEnd();
 
   if (result.__isset.success) {
-    return _return;
+    // _return pointer has now been filled
+    return;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "totalRecord failed: unknown result");
 }
 
-void KC_StorageClient::get(std::string& _return, const std::string& key)
+void KC_StorageClient::get(Z_data& _return, const std::string& key)
 {
   send_get(key);
   recv_get(_return);
@@ -746,7 +746,7 @@ void KC_StorageClient::send_get(const std::string& key)
   oprot_->getTransport()->flush();
 }
 
-void KC_StorageClient::recv_get(std::string& _return)
+void KC_StorageClient::recv_get(Z_data& _return)
 {
 
   int32_t rseqid = 0;
@@ -784,10 +784,10 @@ void KC_StorageClient::recv_get(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "get failed: unknown result");
 }
 
-bool KC_StorageClient::put(const std::string& key, const std::string& value, const putOption::type opt)
+void KC_StorageClient::put(Z_status& _return, const std::string& key, const std::string& value, const putOption::type opt)
 {
   send_put(key, value, opt);
-  return recv_put();
+  recv_put(_return);
 }
 
 void KC_StorageClient::send_put(const std::string& key, const std::string& value, const putOption::type opt)
@@ -806,7 +806,7 @@ void KC_StorageClient::send_put(const std::string& key, const std::string& value
   oprot_->getTransport()->flush();
 }
 
-bool KC_StorageClient::recv_put()
+void KC_StorageClient::recv_put(Z_status& _return)
 {
 
   int32_t rseqid = 0;
@@ -831,7 +831,6 @@ bool KC_StorageClient::recv_put()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  bool _return;
   KC_Storage_put_presult result;
   result.success = &_return;
   result.read(iprot_);
@@ -839,15 +838,16 @@ bool KC_StorageClient::recv_put()
   iprot_->getTransport()->readEnd();
 
   if (result.__isset.success) {
-    return _return;
+    // _return pointer has now been filled
+    return;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "put failed: unknown result");
 }
 
-bool KC_StorageClient::remove(const std::string& key)
+void KC_StorageClient::remove(Z_status& _return, const std::string& key)
 {
   send_remove(key);
-  return recv_remove();
+  recv_remove(_return);
 }
 
 void KC_StorageClient::send_remove(const std::string& key)
@@ -864,7 +864,7 @@ void KC_StorageClient::send_remove(const std::string& key)
   oprot_->getTransport()->flush();
 }
 
-bool KC_StorageClient::recv_remove()
+void KC_StorageClient::recv_remove(Z_status& _return)
 {
 
   int32_t rseqid = 0;
@@ -889,7 +889,6 @@ bool KC_StorageClient::recv_remove()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  bool _return;
   KC_Storage_remove_presult result;
   result.success = &_return;
   result.read(iprot_);
@@ -897,7 +896,8 @@ bool KC_StorageClient::recv_remove()
   iprot_->getTransport()->readEnd();
 
   if (result.__isset.success) {
-    return _return;
+    // _return pointer has now been filled
+    return;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "remove failed: unknown result");
 }
@@ -944,7 +944,7 @@ void KC_StorageProcessor::process_totalRecord(int32_t seqid, ::apache::thrift::p
 
   KC_Storage_totalRecord_result result;
   try {
-    result.success = iface_->totalRecord();
+    iface_->totalRecord(result.success);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -1052,7 +1052,7 @@ void KC_StorageProcessor::process_put(int32_t seqid, ::apache::thrift::protocol:
 
   KC_Storage_put_result result;
   try {
-    result.success = iface_->put(args.key, args.value, args.opt);
+    iface_->put(result.success, args.key, args.value, args.opt);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -1106,7 +1106,7 @@ void KC_StorageProcessor::process_remove(int32_t seqid, ::apache::thrift::protoc
 
   KC_Storage_remove_result result;
   try {
-    result.success = iface_->remove(args.key);
+    iface_->remove(result.success, args.key);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {

@@ -40,12 +40,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o \
 	${OBJECTDIR}/server/KC_GenID/kc_genid_types.o \
 	${OBJECTDIR}/server/KC_Storage/KC_Storage.o \
+	${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_types.o \
-	${OBJECTDIR}/server/Storage/KC_Storage.o \
-	${OBJECTDIR}/server/Storage/WZ_StorageService.o \
-	${OBJECTDIR}/server/Storage/kc_storage_constants.o \
-	${OBJECTDIR}/server/Storage/kc_storage_types.o \
 	${OBJECTDIR}/server/UserStorage.o \
 	${OBJECTDIR}/server/server.o \
 	${OBJECTDIR}/server/user_profile_constants.o \
@@ -107,6 +104,11 @@ ${OBJECTDIR}/server/KC_Storage/KC_Storage.o: server/KC_Storage/KC_Storage.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage.o server/KC_Storage/KC_Storage.cpp
 
+${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o: server/KC_Storage/WZ_StorageService.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o server/KC_Storage/WZ_StorageService.cpp
+
 ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o: server/KC_Storage/kc_storage_constants.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
@@ -116,26 +118,6 @@ ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o: server/KC_Storage/kc_storage_
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o server/KC_Storage/kc_storage_types.cpp
-
-${OBJECTDIR}/server/Storage/KC_Storage.o: server/Storage/KC_Storage.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/KC_Storage.o server/Storage/KC_Storage.cpp
-
-${OBJECTDIR}/server/Storage/WZ_StorageService.o: server/Storage/WZ_StorageService.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/WZ_StorageService.o server/Storage/WZ_StorageService.cpp
-
-${OBJECTDIR}/server/Storage/kc_storage_constants.o: server/Storage/kc_storage_constants.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/kc_storage_constants.o server/Storage/kc_storage_constants.cpp
-
-${OBJECTDIR}/server/Storage/kc_storage_types.o: server/Storage/kc_storage_types.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/kc_storage_types.o server/Storage/kc_storage_types.cpp
 
 ${OBJECTDIR}/server/UserStorage.o: server/UserStorage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server
@@ -238,6 +220,19 @@ ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o: ${OBJECTDIR}/server/KC_Stora
 	    ${CP} ${OBJECTDIR}/server/KC_Storage/KC_Storage.o ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o;\
 	fi
 
+${OBJECTDIR}/server/KC_Storage/WZ_StorageService_nomain.o: ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o server/KC_Storage/WZ_StorageService.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService_nomain.o server/KC_Storage/WZ_StorageService.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService_nomain.o;\
+	fi
+
 ${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o: ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o server/KC_Storage/kc_storage_constants.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o`; \
@@ -262,58 +257,6 @@ ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o: ${OBJECTDIR}/server/KC
 	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o server/KC_Storage/kc_storage_types.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o;\
-	fi
-
-${OBJECTDIR}/server/Storage/KC_Storage_nomain.o: ${OBJECTDIR}/server/Storage/KC_Storage.o server/Storage/KC_Storage.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/Storage/KC_Storage.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/KC_Storage_nomain.o server/Storage/KC_Storage.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/server/Storage/KC_Storage.o ${OBJECTDIR}/server/Storage/KC_Storage_nomain.o;\
-	fi
-
-${OBJECTDIR}/server/Storage/WZ_StorageService_nomain.o: ${OBJECTDIR}/server/Storage/WZ_StorageService.o server/Storage/WZ_StorageService.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/Storage/WZ_StorageService.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/WZ_StorageService_nomain.o server/Storage/WZ_StorageService.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/server/Storage/WZ_StorageService.o ${OBJECTDIR}/server/Storage/WZ_StorageService_nomain.o;\
-	fi
-
-${OBJECTDIR}/server/Storage/kc_storage_constants_nomain.o: ${OBJECTDIR}/server/Storage/kc_storage_constants.o server/Storage/kc_storage_constants.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/Storage/kc_storage_constants.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/kc_storage_constants_nomain.o server/Storage/kc_storage_constants.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/server/Storage/kc_storage_constants.o ${OBJECTDIR}/server/Storage/kc_storage_constants_nomain.o;\
-	fi
-
-${OBJECTDIR}/server/Storage/kc_storage_types_nomain.o: ${OBJECTDIR}/server/Storage/kc_storage_types.o server/Storage/kc_storage_types.cpp 
-	${MKDIR} -p ${OBJECTDIR}/server/Storage
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/Storage/kc_storage_types.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/Storage/kc_storage_types_nomain.o server/Storage/kc_storage_types.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/server/Storage/kc_storage_types.o ${OBJECTDIR}/server/Storage/kc_storage_types_nomain.o;\
 	fi
 
 ${OBJECTDIR}/server/UserStorage_nomain.o: ${OBJECTDIR}/server/UserStorage.o server/UserStorage.cpp 

@@ -15,10 +15,10 @@ namespace KC_Storage {
 class KC_StorageIf {
  public:
   virtual ~KC_StorageIf() {}
-  virtual int32_t totalRecord() = 0;
-  virtual void get(std::string& _return, const std::string& key) = 0;
-  virtual bool put(const std::string& key, const std::string& value, const putOption::type opt) = 0;
-  virtual bool remove(const std::string& key) = 0;
+  virtual void totalRecord(Z_total& _return) = 0;
+  virtual void get(Z_data& _return, const std::string& key) = 0;
+  virtual void put(Z_status& _return, const std::string& key, const std::string& value, const putOption::type opt) = 0;
+  virtual void remove(Z_status& _return, const std::string& key) = 0;
 };
 
 class KC_StorageIfFactory {
@@ -48,20 +48,17 @@ class KC_StorageIfSingletonFactory : virtual public KC_StorageIfFactory {
 class KC_StorageNull : virtual public KC_StorageIf {
  public:
   virtual ~KC_StorageNull() {}
-  int32_t totalRecord() {
-    int32_t _return = 0;
-    return _return;
-  }
-  void get(std::string& /* _return */, const std::string& /* key */) {
+  void totalRecord(Z_total& /* _return */) {
     return;
   }
-  bool put(const std::string& /* key */, const std::string& /* value */, const putOption::type /* opt */) {
-    bool _return = false;
-    return _return;
+  void get(Z_data& /* _return */, const std::string& /* key */) {
+    return;
   }
-  bool remove(const std::string& /* key */) {
-    bool _return = false;
-    return _return;
+  void put(Z_status& /* _return */, const std::string& /* key */, const std::string& /* value */, const putOption::type /* opt */) {
+    return;
+  }
+  void remove(Z_status& /* _return */, const std::string& /* key */) {
+    return;
   }
 };
 
@@ -110,16 +107,16 @@ typedef struct _KC_Storage_totalRecord_result__isset {
 class KC_Storage_totalRecord_result {
  public:
 
-  KC_Storage_totalRecord_result() : success(0) {
+  KC_Storage_totalRecord_result() {
   }
 
   virtual ~KC_Storage_totalRecord_result() throw() {}
 
-  int32_t success;
+  Z_total success;
 
   _KC_Storage_totalRecord_result__isset __isset;
 
-  void __set_success(const int32_t val) {
+  void __set_success(const Z_total& val) {
     success = val;
   }
 
@@ -151,7 +148,7 @@ class KC_Storage_totalRecord_presult {
 
   virtual ~KC_Storage_totalRecord_presult() throw() {}
 
-  int32_t* success;
+  Z_total* success;
 
   _KC_Storage_totalRecord_presult__isset __isset;
 
@@ -218,16 +215,16 @@ typedef struct _KC_Storage_get_result__isset {
 class KC_Storage_get_result {
  public:
 
-  KC_Storage_get_result() : success() {
+  KC_Storage_get_result() {
   }
 
   virtual ~KC_Storage_get_result() throw() {}
 
-  std::string success;
+  Z_data success;
 
   _KC_Storage_get_result__isset __isset;
 
-  void __set_success(const std::string& val) {
+  void __set_success(const Z_data& val) {
     success = val;
   }
 
@@ -259,7 +256,7 @@ class KC_Storage_get_presult {
 
   virtual ~KC_Storage_get_presult() throw() {}
 
-  std::string* success;
+  Z_data* success;
 
   _KC_Storage_get_presult__isset __isset;
 
@@ -344,16 +341,16 @@ typedef struct _KC_Storage_put_result__isset {
 class KC_Storage_put_result {
  public:
 
-  KC_Storage_put_result() : success(0) {
+  KC_Storage_put_result() {
   }
 
   virtual ~KC_Storage_put_result() throw() {}
 
-  bool success;
+  Z_status success;
 
   _KC_Storage_put_result__isset __isset;
 
-  void __set_success(const bool val) {
+  void __set_success(const Z_status& val) {
     success = val;
   }
 
@@ -385,7 +382,7 @@ class KC_Storage_put_presult {
 
   virtual ~KC_Storage_put_presult() throw() {}
 
-  bool* success;
+  Z_status* success;
 
   _KC_Storage_put_presult__isset __isset;
 
@@ -452,16 +449,16 @@ typedef struct _KC_Storage_remove_result__isset {
 class KC_Storage_remove_result {
  public:
 
-  KC_Storage_remove_result() : success(0) {
+  KC_Storage_remove_result() {
   }
 
   virtual ~KC_Storage_remove_result() throw() {}
 
-  bool success;
+  Z_status success;
 
   _KC_Storage_remove_result__isset __isset;
 
-  void __set_success(const bool val) {
+  void __set_success(const Z_status& val) {
     success = val;
   }
 
@@ -493,7 +490,7 @@ class KC_Storage_remove_presult {
 
   virtual ~KC_Storage_remove_presult() throw() {}
 
-  bool* success;
+  Z_status* success;
 
   _KC_Storage_remove_presult__isset __isset;
 
@@ -521,18 +518,18 @@ class KC_StorageClient : virtual public KC_StorageIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  int32_t totalRecord();
+  void totalRecord(Z_total& _return);
   void send_totalRecord();
-  int32_t recv_totalRecord();
-  void get(std::string& _return, const std::string& key);
+  void recv_totalRecord(Z_total& _return);
+  void get(Z_data& _return, const std::string& key);
   void send_get(const std::string& key);
-  void recv_get(std::string& _return);
-  bool put(const std::string& key, const std::string& value, const putOption::type opt);
+  void recv_get(Z_data& _return);
+  void put(Z_status& _return, const std::string& key, const std::string& value, const putOption::type opt);
   void send_put(const std::string& key, const std::string& value, const putOption::type opt);
-  bool recv_put();
-  bool remove(const std::string& key);
+  void recv_put(Z_status& _return);
+  void remove(Z_status& _return, const std::string& key);
   void send_remove(const std::string& key);
-  bool recv_remove();
+  void recv_remove(Z_status& _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -587,16 +584,17 @@ class KC_StorageMultiface : virtual public KC_StorageIf {
     ifaces_.push_back(iface);
   }
  public:
-  int32_t totalRecord() {
+  void totalRecord(Z_total& _return) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->totalRecord();
+      ifaces_[i]->totalRecord(_return);
     }
-    return ifaces_[i]->totalRecord();
+    ifaces_[i]->totalRecord(_return);
+    return;
   }
 
-  void get(std::string& _return, const std::string& key) {
+  void get(Z_data& _return, const std::string& key) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -606,22 +604,24 @@ class KC_StorageMultiface : virtual public KC_StorageIf {
     return;
   }
 
-  bool put(const std::string& key, const std::string& value, const putOption::type opt) {
+  void put(Z_status& _return, const std::string& key, const std::string& value, const putOption::type opt) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->put(key, value, opt);
+      ifaces_[i]->put(_return, key, value, opt);
     }
-    return ifaces_[i]->put(key, value, opt);
+    ifaces_[i]->put(_return, key, value, opt);
+    return;
   }
 
-  bool remove(const std::string& key) {
+  void remove(Z_status& _return, const std::string& key) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->remove(key);
+      ifaces_[i]->remove(_return, key);
     }
-    return ifaces_[i]->remove(key);
+    ifaces_[i]->remove(_return, key);
+    return;
   }
 
 };
