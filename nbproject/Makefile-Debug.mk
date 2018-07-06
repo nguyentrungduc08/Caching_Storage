@@ -44,6 +44,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_types.o \
 	${OBJECTDIR}/server/UserStorage.o \
+	${OBJECTDIR}/server/UserStorageHandler.o \
 	${OBJECTDIR}/server/server.o \
 	${OBJECTDIR}/server/user_profile_constants.o \
 	${OBJECTDIR}/server/user_profile_types.o
@@ -77,67 +78,72 @@ LDLIBSOPTIONS=-lthrift -lpthread
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS} -lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS} -lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc -lPocoUtil -lPocoXML -lPocoJSON -lPocoNet -lPocoFoundation
 
 ${OBJECTDIR}/server/KC_GenID/KC_GenID.o: server/KC_GenID/KC_GenID.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/KC_GenID.o server/KC_GenID/KC_GenID.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/KC_GenID.o server/KC_GenID/KC_GenID.cpp
 
 ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o: server/KC_GenID/WZ_GenIdService.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o server/KC_GenID/WZ_GenIdService.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o server/KC_GenID/WZ_GenIdService.cpp
 
 ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o: server/KC_GenID/kc_genid_constants.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o server/KC_GenID/kc_genid_constants.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o server/KC_GenID/kc_genid_constants.cpp
 
 ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o: server/KC_GenID/kc_genid_types.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o server/KC_GenID/kc_genid_types.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o server/KC_GenID/kc_genid_types.cpp
 
 ${OBJECTDIR}/server/KC_Storage/KC_Storage.o: server/KC_Storage/KC_Storage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage.o server/KC_Storage/KC_Storage.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage.o server/KC_Storage/KC_Storage.cpp
 
 ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o: server/KC_Storage/WZ_StorageService.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o server/KC_Storage/WZ_StorageService.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o server/KC_Storage/WZ_StorageService.cpp
 
 ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o: server/KC_Storage/kc_storage_constants.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o server/KC_Storage/kc_storage_constants.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o server/KC_Storage/kc_storage_constants.cpp
 
 ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o: server/KC_Storage/kc_storage_types.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o server/KC_Storage/kc_storage_types.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o server/KC_Storage/kc_storage_types.cpp
 
 ${OBJECTDIR}/server/UserStorage.o: server/UserStorage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorage.o server/UserStorage.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorage.o server/UserStorage.cpp
+
+${OBJECTDIR}/server/UserStorageHandler.o: server/UserStorageHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorageHandler.o server/UserStorageHandler.cpp
 
 ${OBJECTDIR}/server/server.o: server/server.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/server.o server/server.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/server.o server/server.cpp
 
 ${OBJECTDIR}/server/user_profile_constants.o: server/user_profile_constants.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_constants.o server/user_profile_constants.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_constants.o server/user_profile_constants.cpp
 
 ${OBJECTDIR}/server/user_profile_types.o: server/user_profile_types.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_types.o server/user_profile_types.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_types.o server/user_profile_types.cpp
 
 # Subprojects
 .build-subprojects:
@@ -152,7 +158,7 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/newsimpletest.o ${OBJECTFILES:%.o=%_no
 ${TESTDIR}/tests/newsimpletest.o: tests/newsimpletest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
 
 
 ${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o: ${OBJECTDIR}/server/KC_GenID/KC_GenID.o server/KC_GenID/KC_GenID.cpp 
@@ -163,7 +169,7 @@ ${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o: ${OBJECTDIR}/server/KC_GenID/KC_
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o server/KC_GenID/KC_GenID.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o server/KC_GenID/KC_GenID.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_GenID/KC_GenID.o ${OBJECTDIR}/server/KC_GenID/KC_GenID_nomain.o;\
 	fi
@@ -176,7 +182,7 @@ ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService_nomain.o: ${OBJECTDIR}/server/KC_Ge
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService_nomain.o server/KC_GenID/WZ_GenIdService.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService_nomain.o server/KC_GenID/WZ_GenIdService.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService_nomain.o;\
 	fi
@@ -189,7 +195,7 @@ ${OBJECTDIR}/server/KC_GenID/kc_genid_constants_nomain.o: ${OBJECTDIR}/server/KC
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants_nomain.o server/KC_GenID/kc_genid_constants.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants_nomain.o server/KC_GenID/kc_genid_constants.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants_nomain.o;\
 	fi
@@ -202,7 +208,7 @@ ${OBJECTDIR}/server/KC_GenID/kc_genid_types_nomain.o: ${OBJECTDIR}/server/KC_Gen
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_types_nomain.o server/KC_GenID/kc_genid_types.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_types_nomain.o server/KC_GenID/kc_genid_types.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o ${OBJECTDIR}/server/KC_GenID/kc_genid_types_nomain.o;\
 	fi
@@ -215,7 +221,7 @@ ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o: ${OBJECTDIR}/server/KC_Stora
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o server/KC_Storage/KC_Storage.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o server/KC_Storage/KC_Storage.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_Storage/KC_Storage.o ${OBJECTDIR}/server/KC_Storage/KC_Storage_nomain.o;\
 	fi
@@ -228,7 +234,7 @@ ${OBJECTDIR}/server/KC_Storage/WZ_StorageService_nomain.o: ${OBJECTDIR}/server/K
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService_nomain.o server/KC_Storage/WZ_StorageService.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService_nomain.o server/KC_Storage/WZ_StorageService.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService_nomain.o;\
 	fi
@@ -241,7 +247,7 @@ ${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o: ${OBJECTDIR}/serve
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o server/KC_Storage/kc_storage_constants.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o server/KC_Storage/kc_storage_constants.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants_nomain.o;\
 	fi
@@ -254,7 +260,7 @@ ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o: ${OBJECTDIR}/server/KC
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o server/KC_Storage/kc_storage_types.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o server/KC_Storage/kc_storage_types.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o;\
 	fi
@@ -267,9 +273,22 @@ ${OBJECTDIR}/server/UserStorage_nomain.o: ${OBJECTDIR}/server/UserStorage.o serv
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorage_nomain.o server/UserStorage.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorage_nomain.o server/UserStorage.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/UserStorage.o ${OBJECTDIR}/server/UserStorage_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/UserStorageHandler_nomain.o: ${OBJECTDIR}/server/UserStorageHandler.o server/UserStorageHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/UserStorageHandler.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorageHandler_nomain.o server/UserStorageHandler.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/UserStorageHandler.o ${OBJECTDIR}/server/UserStorageHandler_nomain.o;\
 	fi
 
 ${OBJECTDIR}/server/server_nomain.o: ${OBJECTDIR}/server/server.o server/server.cpp 
@@ -280,7 +299,7 @@ ${OBJECTDIR}/server/server_nomain.o: ${OBJECTDIR}/server/server.o server/server.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/server_nomain.o server/server.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/server_nomain.o server/server.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/server.o ${OBJECTDIR}/server/server_nomain.o;\
 	fi
@@ -293,7 +312,7 @@ ${OBJECTDIR}/server/user_profile_constants_nomain.o: ${OBJECTDIR}/server/user_pr
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_constants_nomain.o server/user_profile_constants.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_constants_nomain.o server/user_profile_constants.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/user_profile_constants.o ${OBJECTDIR}/server/user_profile_constants_nomain.o;\
 	fi
@@ -306,7 +325,7 @@ ${OBJECTDIR}/server/user_profile_types_nomain.o: ${OBJECTDIR}/server/user_profil
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_types_nomain.o server/user_profile_types.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_types_nomain.o server/user_profile_types.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/user_profile_types.o ${OBJECTDIR}/server/user_profile_types_nomain.o;\
 	fi
