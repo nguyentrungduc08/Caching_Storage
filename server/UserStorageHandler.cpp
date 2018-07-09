@@ -10,13 +10,48 @@
 UserStorageHandler::UserStorageHandler() {
     // Your initialization goes here
     std::cout << "Server Starting........." << std::endl;
-    std::cout << std::endl;
+    
+    //create worker 
+    this->_worker1 = make_shared<Worker>(this->_queue, "Worker1"); 
+    this->_worker2 = make_shared<Worker>(this->_queue, "Worker2"); 
+    this->_worker3 = make_shared<Worker>(this->_queue, "Worker3"); 
+    
+//    Worker worker11(this->_queue,"Worker1");
+//    this->worker1 = worker11;
+//    Worker worker22(this->_queue,"Worker2");
+//    this->worker2 = worker22;
+//    Worker worker33(this->_queue,"Worker3");
+//    this->worker3 = worker33;
+//    
+//    // start workers
+    
+    shared_ptr<Worker> w = shared_ptr<Worker>(new Worker(this->_queue, "Worker1xxx"));
+    ThreadPool::defaultPool().start(*(w.get())); 
+    
+//    Worker w1;
+//    ThreadPool::defaultPool().start(*(this->_worker1.get())); 
+//    ThreadPool::defaultPool().start(*(this->_worker2.get())); 
+//    ThreadPool::defaultPool().start(*(this->_worker3.get())); 
+//    ThreadPool::defaultPool().
+//    ThreadPool::defaultPool().start(this->_worker2);
+//    ThreadPool::defaultPool().start(this->_worker3);
 }
 
 UserStorageHandler::UserStorageHandler(const UserStorageHandler& orig) {
+    
 }
 
 UserStorageHandler::~UserStorageHandler() {
+    // wait until all work is done
+    while (!this->_queue.empty()){ 
+        Poco::Thread::sleep(100);
+    }
+    
+    // tell workers they're done
+    this->_queue.wakeUpAll(); 
+    
+    ThreadPool::defaultPool().joinAll();
+    
     std::cout << "Server shutdown!!! " << std::endl;
 }
 
@@ -25,7 +60,7 @@ UserStorageHandler::createUser(const UserProfile& user) {
     // Your implementation goes here
     printf("createUser\n");
     UserProfile usert = user;
-    putOption::type putType = putOption::type::add;
+    KC_Storage::putOption::type opt = KC_Storage::putOption::type::add;
     WZ_GenIdService wzGenId;
     int zId = wzGenId.W_genID("test");
 
@@ -36,10 +71,12 @@ UserStorageHandler::createUser(const UserProfile& user) {
     std::string sid = binaryString;
     std::string serialized_string = this->serialize(usert);
 
-    WZ_StorageService wzStorage;
-    KC_Storage::putOption::type opt = KC_Storage::putOption::type::add;
-    bool ok = wzStorage.W_put(sid, serialized_string, opt);
-    if (ok) {
+//    WZ_StorageService wzStorage;
+//    bool ok = wzStorage.W_put(sid, serialized_string, opt);
+    
+    this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
+    
+    if (true) {
         std::cout << "Store user's profile success" << std::endl;
         return zId;
     } else {

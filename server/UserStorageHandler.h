@@ -29,15 +29,73 @@
 #include "KC_Storage/WZ_StorageService.h"
 #include "KC_Storage/KC_Storage.h"
 
+#include "Poco/Notification.h"
+#include "Poco/NotificationQueue.h"
+#include "Poco/ThreadPool.h"
+#include "Poco/Runnable.h"
+#include "Poco/AutoPtr.h"
+
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 using namespace ::apache::thrift::concurrency;
 
+using Poco::AutoPtr;
+using Poco::Notification;
+using Poco::NotificationQueue;
+using Poco::ThreadPool;
+using Poco::Runnable;
+
 using boost::shared_ptr;
 
 using namespace ::Task1;
+
+class NotificationStoreProfile : public Poco::Notification {
+public :
+    NotificationStoreProfile(std::string key, std::string data, putOption::type opt) : _key(key), _data(data), _putType(opt) {
+        
+    }
+
+    std::string getKey() const {
+        return this->_key;
+    }
+    
+    std::string getData() const{
+        return this->_data;
+    }
+    
+    putOption::type getPutOption() const {
+        return this->_putType;
+    }
+    
+private:
+    std::string _key;
+    std::string _data;
+    putOption::type _putType;
+};
+
+class Worker : public Poco::Runnable { 
+public :
+    Worker(NotificationQueue & queue, std::string workerName) : _queue(queue), _name(workerName) {
+        std::cout << "construct Worker " << std::endl;
+    }
+
+    void run() {
+        AutoPtr<Notification> pNf(_queue.waitDequeueNotification()); //
+        while (pNf) {
+            NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*>(pNf.get());
+            if (pWorkNf) {
+                WZ_StorageService wzStorage;
+                bool ok = wzStorage.W_put(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption());
+            } 
+            pNf = _queue.waitDequeueNotification();
+        }
+    }
+private:
+    NotificationQueue& _queue;
+    std::string _name;
+};
 
 class UserStorageHandler : virtual public UserStorageIf {
 public:
@@ -55,7 +113,14 @@ public:
     
 private:
     void showProfile(const UserProfile& profile);
+    
+    NotificationQueue _queue;
+    shared_ptr<Worker> _worker1;
+    shared_ptr<Worker> _worker2;
+    shared_ptr<Worker> _worker3;
 };
+
+
 
 #endif	/* USERSTORAGEHANDLER_H */
 

@@ -17,6 +17,12 @@
 #include "Poco/Util/HelpFormatter.h"
 #include "Poco/Util/AbstractConfiguration.h"
 
+#include "Poco/Notification.h"
+#include "Poco/NotificationQueue.h"
+#include "Poco/ThreadPool.h"
+#include "Poco/Runnable.h"
+#include "Poco/AutoPtr.h"
+
 #include <boost/make_shared.hpp>
 
 #include "UserStorageHandler.h"
@@ -33,7 +39,7 @@ using Poco::Util::OptionSet;
 using Poco::Util::HelpFormatter;
 using Poco::Util::AbstractConfiguration;
 using Poco::Util::OptionCallback;
-using Poco::AutoPtr;
+
 
 using boost::shared_ptr;
 
@@ -145,7 +151,6 @@ private:
 
         TThreadedServer server(processor, serverTransport, transportFactory, protocolFactory);
         server.serve();
-
         return;
     }
 
@@ -190,92 +195,6 @@ private:
     }
 };
 
-//void runTSimpleServer();
-//void runTNonblockingServer();
-//void runTThreadPoolServer();
-//void runTThreadedServer();
-
-
-//int main(int argc, char **argv) {
-//
-//    runTSimpleServer();
-//    //    runTThreadedServer();
-//    //    runTThreadPoolServer();
-//    //    runTNonblockingServer();
-//
-//    return 0;
-//}
 
 POCO_APP_MAIN(UserProfileStorageService)
 
-//void
-//runTSimpleServer() {
-//    std::cout << "runTSimpleServer" << std::endl;
-//    int port = 9090;
-//    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-//    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-//    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-//    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-//    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-//
-//    TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
-//    server.serve();
-//
-//    return;
-//}
-//
-//void
-//runTThreadedServer() {
-//    std::cout << "runTThreadedServer" << std::endl;
-//    int port = 9090;
-//    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-//    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-//    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-//    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-//    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-//
-//    TThreadedServer server(processor, serverTransport, transportFactory, protocolFactory);
-//    server.serve();
-//
-//    return;
-//}
-//
-//void
-//runTThreadPoolServer() {
-//    std::cout << "runTThreadPoolServer" << std::endl;
-//    int port = 9090;
-//    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-//    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-//    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-//    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-//    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-//
-//    shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(15);
-//    shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
-//    threadManager->threadFactory(threadFactory);
-//    threadManager->start();
-//
-//    TThreadPoolServer server(processor, serverTransport, transportFactory, protocolFactory, threadManager);
-//    server.serve();
-//    return;
-//}
-//
-//void
-//runTNonblockingServer() {
-//    std::cout << "runTNonblockingServer" << std::endl;
-//    int port = 9090;
-//    shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-//    shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-//    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-//    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-//    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-//
-//    shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(15);
-//    shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
-//    threadManager->threadFactory(threadFactory);
-//    threadManager->start();
-//
-//    TNonblockingServer server(processor, protocolFactory, port, threadManager);
-//    server.serve();
-//    return;
-//}
