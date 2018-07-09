@@ -26,7 +26,7 @@ UserStorageHandler::UserStorageHandler() {
 //    // start workers
     
     shared_ptr<Worker> w = shared_ptr<Worker>(new Worker(this->_queue, "Worker1xxx"));
-    ThreadPool::defaultPool().start(*(w.get())); 
+    ThreadPool::defaultPool().start(*(w.get()));
     
 //    Worker w1;
 //    ThreadPool::defaultPool().start(*(this->_worker1.get())); 
