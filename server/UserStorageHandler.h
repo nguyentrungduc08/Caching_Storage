@@ -32,6 +32,7 @@
 #include "Poco/Notification.h"
 #include "Poco/NotificationQueue.h"
 #include "Poco/ThreadPool.h"
+#include "Poco/Thread.h"
 #include "Poco/Runnable.h"
 #include "Poco/AutoPtr.h"
 
@@ -52,57 +53,62 @@ using boost::shared_ptr;
 using namespace ::Task1;
 
 class NotificationStoreProfile : public Poco::Notification {
-public :
+public:
+
     NotificationStoreProfile(std::string key, std::string data, putOption::type opt) : _key(key), _data(data), _putType(opt) {
-        
+
     }
 
     std::string getKey() const {
         return this->_key;
     }
-    
-    std::string getData() const{
+
+    std::string getData() const {
         return this->_data;
     }
-    
+
     putOption::type getPutOption() const {
         return this->_putType;
     }
-    
+
 private:
     std::string _key;
     std::string _data;
     putOption::type _putType;
 };
 
-class Worker : public Poco::Runnable { 
-public :
-    Worker(NotificationQueue & queue, std::string workerName) : _queue(queue), _name(workerName) {
-        std::cout << "construct Worker " << std::endl;
-    }
 
+class Z_Worker : public Poco::Runnable {
+public:
+    Z_Worker(const std::string & key, const std::string data, const putOption::type opt) : _key(key), _data(data) , _putType(opt) {
+        
+    } 
+    
+    Z_Worker(const Z_Worker& other) : _key(other._key), _data(other._data), _putType(other._putType)
+    {
+        
+    }
+    
+    virtual ~Z_Worker(){
+        std::cout << "remove worker" << std::endl;
+    } 
+    
     void run() {
-        AutoPtr<Notification> pNf(_queue.waitDequeueNotification()); //
-        while (pNf) {
-            NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*>(pNf.get());
-            if (pWorkNf) {
-                WZ_StorageService wzStorage;
-                bool ok = wzStorage.W_put(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption());
-            } 
-            pNf = _queue.waitDequeueNotification();
-        }
+        WZ_StorageService wzStorage;
+        bool ok = wzStorage.W_put(this->_key, this->_data, this->_putType);
     }
 private:
-    NotificationQueue& _queue;
-    std::string _name;
+    std::string _key;
+    std::string _data;
+    putOption::type _putType;
 };
 
-class UserStorageHandler : virtual public UserStorageIf {
+class UserStorageHandler : virtual public UserStorageIf, Poco::Runnable {
 public:
     UserStorageHandler();
     UserStorageHandler(const UserStorageHandler& orig);
     virtual ~UserStorageHandler();
-    
+
     int32_t createUser(const UserProfile& user);
     void getUser(UserProfile& _return, const int32_t uid);
     int32_t editUser(const int32_t uid, const UserProfile& user);
@@ -110,14 +116,14 @@ public:
     std::string serialize(idcounter uid);
     idcounter deserializeID(std::string binaryString);
     UserProfile deserialize(std::string serializeString);
-    
+
+    void run();
+
 private:
     void showProfile(const UserProfile& profile);
-    
+
     NotificationQueue _queue;
-    shared_ptr<Worker> _worker1;
-    shared_ptr<Worker> _worker2;
-    shared_ptr<Worker> _worker3;
+    Poco::Thread _thread;
 };
 
 

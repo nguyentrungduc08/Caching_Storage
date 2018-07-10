@@ -11,30 +11,24 @@ UserStorageHandler::UserStorageHandler() {
     // Your initialization goes here
     std::cout << "Server Starting........." << std::endl;
     
-    //create worker 
-    this->_worker1 = make_shared<Worker>(this->_queue, "Worker1"); 
-    this->_worker2 = make_shared<Worker>(this->_queue, "Worker2"); 
-    this->_worker3 = make_shared<Worker>(this->_queue, "Worker3"); 
+    this->_thread.start(*this);
     
-//    Worker worker11(this->_queue,"Worker1");
-//    this->worker1 = worker11;
-//    Worker worker22(this->_queue,"Worker2");
-//    this->worker2 = worker22;
-//    Worker worker33(this->_queue,"Worker3");
-//    this->worker3 = worker33;
-//    
-//    // start workers
-    
-    shared_ptr<Worker> w = shared_ptr<Worker>(new Worker(this->_queue, "Worker1xxx"));
-    ThreadPool::defaultPool().start(*(w.get()));
-    
-//    Worker w1;
-//    ThreadPool::defaultPool().start(*(this->_worker1.get())); 
-//    ThreadPool::defaultPool().start(*(this->_worker2.get())); 
-//    ThreadPool::defaultPool().start(*(this->_worker3.get())); 
-//    ThreadPool::defaultPool().
-//    ThreadPool::defaultPool().start(this->_worker2);
-//    ThreadPool::defaultPool().start(this->_worker3);
+}
+
+void 
+UserStorageHandler::run() {
+        
+        AutoPtr<Notification> pNf(_queue.waitDequeueNotification()); //
+        while (pNf) {
+            NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*>(pNf.get());
+            if (pWorkNf && ThreadPool::defaultPool().available() > 0) {
+//                Z_Worker worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption());
+                shared_ptr<Z_Worker> worker(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption()));
+//                ThreadPool::defaultPool().start( *(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption())) );
+                ThreadPool::defaultPool().start( *(worker.get()) );
+                pNf = _queue.waitDequeueNotification();
+            } 
+        }
 }
 
 UserStorageHandler::UserStorageHandler(const UserStorageHandler& orig) {
