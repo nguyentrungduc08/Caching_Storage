@@ -22,10 +22,9 @@ UserStorageHandler::run() {
         while (pNf) {
             NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*>(pNf.get());
             if (pWorkNf && ThreadPool::defaultPool().available() > 0) {
-//                Z_Worker worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption());
                 shared_ptr<Z_Worker> worker(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption()));
-//                ThreadPool::defaultPool().start( *(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption())) );
                 ThreadPool::defaultPool().start( *(worker.get()) );
+//                std::cout << "size pool" << ThreadPool::defaultPool().getStackSize() << std::endl;
                 pNf = _queue.waitDequeueNotification();
             } 
         }

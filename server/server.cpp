@@ -16,6 +16,7 @@
 #include "Poco/Util/OptionSet.h"
 #include "Poco/Util/HelpFormatter.h"
 #include "Poco/Util/AbstractConfiguration.h"
+#include "Poco/Util/ServerApplication.h"
 
 #include "Poco/Notification.h"
 #include "Poco/NotificationQueue.h"
@@ -45,37 +46,39 @@ using boost::shared_ptr;
 
 using namespace ::Task1;
 
-class UserProfileStorageService : public Application {
+class UserProfileStorageService : public Poco::Util::ServerApplication {
 public:
-
     UserProfileStorageService() : _helpRequested(false) {
         std::cout << "Start POCO Application service..." << std::endl;
+        this->_host = "localhost";
+        this->_port = 9090;
+        this->_helpRequested = false;
     }
 
 protected:
 
-    void 
+    void
     initialize(Application& self) {
         loadConfiguration(); // load default configuration files, if present
         Application::initialize(self);
         // add your own initialization code here
     }
 
-    void 
+    void
     uninitialize() {
         // add your own uninitialization code here
         Application::uninitialize();
     }
 
-    void 
+    void
     reinitialize(Application& self) {
         Application::reinitialize(self);
         // add your own reinitialization code here
     }
 
-    void 
+    void
     defineOptions(OptionSet& options) {
-        Application::defineOptions(options);
+        ServerApplication::defineOptions(options);
 
         options.addOption(
                 Option("help", "h", "display help information on command line arguments")
@@ -84,45 +87,72 @@ protected:
                 .callback(OptionCallback<UserProfileStorageService>(this, &UserProfileStorageService::handleHelp)));
 
         options.addOption(
+                Option("port", "p", "Listening port (default 9090)")
+                .required(false)
+                .repeatable(false)
+                .argument("<port>")
+                .callback(OptionCallback<UserProfileStorageService>(this, &UserProfileStorageService::setPort)));
+
+        options.addOption(
+                Option("host", "ip", "default (localhost)")
+                .required(false)
+                .repeatable(false)
+                .argument("<host>")
+                .callback(OptionCallback<UserProfileStorageService>(this, &UserProfileStorageService::setHost)));
+
+        options.addOption(
                 Option("bind", "b", "bind option value to test.property")
                 .required(false)
                 .repeatable(false)
-                .argument("value")
+                .argument("<value>")
                 .binding("test.property"));
     }
 
-    void 
+    void
     handleHelp(const std::string& name, const std::string& value) {
-        _helpRequested = true;
+        this->_helpRequested = true;
         displayHelp();
         stopOptionsProcessing();
     }
 
-    void 
+    void
+    setPort(const std::string& name, const std::string& value) {
+        std::cout << "set port - " << value << " - " << name << std::endl;
+        this->_port = std::stoi(value);
+        std::cout << "value int " << this->_port + 1 << std::endl;
+    }
+
+    void
+    setHost(const std::string& name, const std::string& value) {
+        std::cout << "set host - " << value << " - " << name << std::endl;
+    }
+
+    void
     displayHelp() {
         HelpFormatter helpFormatter(options());
         helpFormatter.setCommand(commandName());
-        helpFormatter.setUsage("OPTIONS");
-        helpFormatter.setHeader("A sample application that demonstrates some of the features of the Poco::Util::Application class.");
+        helpFormatter.setUsage("[OPTIONS]");
+        helpFormatter.setHeader("C++ server using to store user profile ");
         helpFormatter.format(std::cout);
     }
 
-    int 
+    int
     main(const ArgVec& args) {
         std::cout << "begin main" << std::endl;
         if (!_helpRequested) {
             runTSimpleServer();
-//            runTThreadedServer();
-//            runTThreadPoolServer();
-//            runTNonblockingServer();
+            //            runTThreadedServer();
+            //            runTThreadPoolServer();
+            //            runTNonblockingServer();
         }
         return Application::EXIT_OK;
     }
 
 private:
-    bool        _helpRequested;
-    int         _port;
+    bool _helpRequested;
+    int _port;
     std::string _host;
+
     void
     runTSimpleServer() {
         std::cout << "runTSimpleServer" << std::endl;
@@ -196,5 +226,10 @@ private:
 };
 
 
-POCO_APP_MAIN(UserProfileStorageService)
+//POCO_APP_MAIN(UserProfileStorageService)
+
+int main(int argc, char* argv[]) {
+    UserProfileStorageService serverApp;
+    return serverApp.run(argc, argv);
+}
 
