@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o \
 	${OBJECTDIR}/server/KC_Storage/kc_storage_types.o \
+	${OBJECTDIR}/server/LRUCache/LRUCache.o \
 	${OBJECTDIR}/server/UserStorage.o \
 	${OBJECTDIR}/server/UserStorageHandler.o \
 	${OBJECTDIR}/server/server.o \
@@ -119,6 +120,11 @@ ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o: server/KC_Storage/kc_storage_
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o server/KC_Storage/kc_storage_types.cpp
+
+${OBJECTDIR}/server/LRUCache/LRUCache.o: server/LRUCache/LRUCache.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/LRUCache
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/LRUCache/LRUCache.o server/LRUCache/LRUCache.cpp
 
 ${OBJECTDIR}/server/UserStorage.o: server/UserStorage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server
@@ -263,6 +269,19 @@ ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o: ${OBJECTDIR}/server/KC
 	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o server/KC_Storage/kc_storage_types.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o ${OBJECTDIR}/server/KC_Storage/kc_storage_types_nomain.o;\
+	fi
+
+${OBJECTDIR}/server/LRUCache/LRUCache_nomain.o: ${OBJECTDIR}/server/LRUCache/LRUCache.o server/LRUCache/LRUCache.cpp 
+	${MKDIR} -p ${OBJECTDIR}/server/LRUCache
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/server/LRUCache/LRUCache.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I/usr/local/include/thrift -I/usr/local/include/boost -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/LRUCache/LRUCache_nomain.o server/LRUCache/LRUCache.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/server/LRUCache/LRUCache.o ${OBJECTDIR}/server/LRUCache/LRUCache_nomain.o;\
 	fi
 
 ${OBJECTDIR}/server/UserStorage_nomain.o: ${OBJECTDIR}/server/UserStorage.o server/UserStorage.cpp 

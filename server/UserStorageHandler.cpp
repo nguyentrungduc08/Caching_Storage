@@ -63,9 +63,6 @@ UserStorageHandler::createUser(const UserProfile& user) {
     std::string binaryString = serialize(zId);
     std::string sid = binaryString;
     std::string serialized_string = this->serialize(usert);
-
-//    WZ_StorageService wzStorage;
-//    bool ok = wzStorage.W_put(sid, serialized_string, opt);
     
     this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
     
@@ -138,7 +135,7 @@ UserStorageHandler::serialize(idcounter uid) {
 
 idcounter 
 UserStorageHandler::deserializeID(std::string binaryString) {
-
+    
 }
 
 UserProfile 

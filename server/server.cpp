@@ -17,6 +17,7 @@
 #include "Poco/Util/HelpFormatter.h"
 #include "Poco/Util/AbstractConfiguration.h"
 #include "Poco/Util/ServerApplication.h"
+#include "Poco/Util/Subsystem.h"
 
 #include "Poco/Notification.h"
 #include "Poco/NotificationQueue.h"
@@ -67,7 +68,7 @@ protected:
     void
     uninitialize() {
         // add your own uninitialization code here
-        Application::uninitialize();
+        Application::uninitialize();    
     }
 
     void
@@ -224,7 +225,6 @@ private:
         return;
     }
 };
-
 
 //POCO_APP_MAIN(UserProfileStorageService)
 
