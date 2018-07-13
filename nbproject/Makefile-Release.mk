@@ -75,11 +75,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/caching_storage
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/caching_storage: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1 ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/caching_storage ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/server/KC_GenID/KC_GenID.o: server/KC_GenID/KC_GenID.cpp 
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
@@ -361,7 +361,7 @@ ${OBJECTDIR}/server/user_profile_types_nomain.o: ${OBJECTDIR}/server/user_profil
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/task1
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/caching_storage
 
 # Subprojects
 .clean-subprojects:

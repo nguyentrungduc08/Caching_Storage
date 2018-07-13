@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Task1
+PROJECTNAME=Caching_Storage
 
 # Active Configuration
 DEFAULTCONF=Debug
