@@ -17,6 +17,9 @@
         <itemPath>server/KC_Storage/kc_storage_types.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="LRUCache" projectFiles="true">
+        <itemPath>server/LRUCache/ArrayList.h</itemPath>
+        <itemPath>server/LRUCache/DoublyLinkedList.h</itemPath>
+        <itemPath>server/LRUCache/HashTable.h</itemPath>
         <itemPath>server/LRUCache/LRUCache.h</itemPath>
       </logicalFolder>
       <itemPath>server/UserStorage.h</itemPath>
@@ -169,6 +172,12 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="server/LRUCache/ArrayList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/LRUCache/DoublyLinkedList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/LRUCache/HashTable.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="server/LRUCache/LRUCache.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="server/LRUCache/LRUCache.h" ex="false" tool="3" flavor2="0">
@@ -287,6 +296,12 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="server/LRUCache/ArrayList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/LRUCache/DoublyLinkedList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="server/LRUCache/HashTable.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="server/LRUCache/LRUCache.cpp" ex="false" tool="1" flavor2="0">
       </item>

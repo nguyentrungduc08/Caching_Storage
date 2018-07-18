@@ -78,15 +78,16 @@ private:
 };
 
 
+/*
+ class wrapper using to write asynchronous to database.
+ */
 class Z_Worker : public Poco::Runnable {
 public:
-    Z_Worker(const std::string & key, const std::string data, const putOption::type opt) : _key(key), _data(data) , _putType(opt) {
-        
+    Z_Worker(const std::string & key, const std::string data, const putOption::type opt) : _key(key), _data(data) , _putType(opt) {   
     } 
     
     Z_Worker(const Z_Worker& other) : _key(other._key), _data(other._data), _putType(other._putType)
     {
-        
     }
     
     virtual ~Z_Worker(){
@@ -97,11 +98,13 @@ public:
         WZ_StorageService wzStorage;
         bool ok = wzStorage.W_put(this->_key, this->_data, this->_putType);
     }
+    
 private:
     std::string _key;
     std::string _data;
     putOption::type _putType;
 };
+
 
 class UserStorageHandler : virtual public UserStorageIf, Poco::Runnable {
 public:

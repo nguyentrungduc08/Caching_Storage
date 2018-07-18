@@ -48,6 +48,9 @@ UserStorageHandler::~UserStorageHandler() {
     std::cout << "Server shutdown!!! " << std::endl;
 }
 
+/*
+ * create new uer profile and store in KC.  
+ */
 int32_t
 UserStorageHandler::createUser(const UserProfile& user) {
     // Your implementation goes here
