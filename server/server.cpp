@@ -28,6 +28,7 @@
 #include <boost/make_shared.hpp>
 
 #include "UserStorageHandler.h"
+#include "LRUCache/LRUCache.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -47,6 +48,45 @@ using boost::shared_ptr;
 
 using namespace ::Task1;
 
+class CacheSubsystem : public Poco::Util::Subsystem {
+private:
+    LRUCache<int , UserProfile> _cache;
+public: 
+    CacheSubsystem(){
+        std::cout << "create Cache module" << std::endl;
+    }
+    
+    ~CacheSubsystem() {
+        
+    }
+protected:
+    void initialize(Poco::Util::Application &app) {
+        std::cout << "initialize subsystem cache service" << std::endl;
+    }
+    void reinitialize(Poco::Util::Application &app) {
+        
+    }
+    void release() {
+        std::cout << "release subsystem cache service" << std::endl;
+    }
+    
+    virtual void defineOptions(OptionSet& options) {
+        
+    }
+
+    virtual const char* name() const {
+        return "Cache Subsystem";
+    }
+    
+    void uninitialize() {
+        std::cout << "uninitialize subsystem cache service" << std::endl;
+    }
+
+private:
+    static CacheSubsystem obj;
+};
+
+
 class UserProfileStorageService : public Poco::Util::ServerApplication {
 public:
     UserProfileStorageService() : _helpRequested(false) {
@@ -54,6 +94,7 @@ public:
         this->_host = "localhost";
         this->_port = 9090;
         this->_helpRequested = false;
+        
     }
 
 protected:
@@ -61,7 +102,13 @@ protected:
     void
     initialize(Application& self) {
         loadConfiguration(); // load default configuration files, if present
+        
+        //add subsystem
+        // addSubsystem(new CacheSubsystem());
+        addSubsystem(&this->_cacheSubsystem);
+        
         Application::initialize(self);
+        
         // add your own initialization code here
     }
 
@@ -150,9 +197,10 @@ protected:
     }
 
 private:
-    bool _helpRequested;
-    int _port;
-    std::string _host;
+    bool            _helpRequested;
+    int             _port;
+    std::string     _host;
+    CacheSubsystem  _cacheSubsystem;
 
     void
     runTSimpleServer() {

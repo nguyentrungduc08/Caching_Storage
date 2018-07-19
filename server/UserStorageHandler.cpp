@@ -17,15 +17,13 @@ UserStorageHandler::UserStorageHandler() {
 
 void 
 UserStorageHandler::run() {
-        
         AutoPtr<Notification> pNf(_queue.waitDequeueNotification()); //
         while (pNf) {
-            NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*>(pNf.get());
+            NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*>(pNf.get()); //get notification from NotificationQueue
             if (pWorkNf && ThreadPool::defaultPool().available() > 0) {
                 shared_ptr<Z_Worker> worker(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption()));
-                ThreadPool::defaultPool().start( *(worker.get()) );
-//                std::cout << "size pool" << ThreadPool::defaultPool().getStackSize() << std::endl;
-                pNf = _queue.waitDequeueNotification();
+                ThreadPool::defaultPool().start( *(worker.get()) ); // set task for Worker
+                pNf = _queue.waitDequeueNotification(); // get Net nofitication if available in queue
             } 
         }
 }
@@ -49,7 +47,8 @@ UserStorageHandler::~UserStorageHandler() {
 }
 
 /*
- * create new uer profile and store in KC.  
+ * create new uer profile and store in KC.
+ *   
  */
 int32_t
 UserStorageHandler::createUser(const UserProfile& user) {
@@ -66,6 +65,7 @@ UserStorageHandler::createUser(const UserProfile& user) {
     std::string binaryString = serialize(zId);
     std::string sid = binaryString;
     std::string serialized_string = this->serialize(usert);
+    
     
     this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
     
@@ -154,9 +154,9 @@ UserStorageHandler::deserialize(std::string serializeString) {
 
 void
 UserStorageHandler::showProfile(const UserProfile& profile) {
-    std::cout << "Detail User's Profile" << std::endl;
-    std::cout << "- UId: " << profile.uid << std::endl;
-    std::cout << "- Name: " << profile.name << std::endl;
-    std::cout << "- age: " << profile.age << std::endl;
-    std::cout << "- gender: " << profile.gender << std::endl;
+    std::cout << "Detail User's Profile"            << std::endl;
+    std::cout << "- UId: "      << profile.uid      << std::endl;
+    std::cout << "- Name: "     << profile.name     << std::endl;
+    std::cout << "- age: "      << profile.age      << std::endl;
+    std::cout << "- gender: "   << profile.gender   << std::endl;
 }
