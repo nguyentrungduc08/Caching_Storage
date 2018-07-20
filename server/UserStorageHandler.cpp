@@ -10,18 +10,18 @@
 UserStorageHandler::UserStorageHandler() {
     // Your initialization goes here
     std::cout << "Server Starting........." << std::endl;
-    UserProfile u;
-    u.uid = 0;
-    u.name = "test";
-    u.age = 1;
-    u.gender = 1;
-    Zcache::getInstance().add(0, u);    
+//    UserProfile u;
+//    u.uid = 0;
+//    u.name = "test";
+//    u.age = 1;
+//    u.gender = 1;
+//    Zcache::getInstance().add(0, u);    
+//
+//    UserProfile e;
+//    Zcache::getInstance().get(0, e);
+//    std::cout << "hello " << e.name << std::endl;   
 
-    UserProfile e;
-    Zcache::getInstance().get(0, e);
-    std::cout << "hello " << e.name << std::endl;   
-
-    this->_thread.start(*this);
+    this->_thread.start(*this); // start thread waiting to handle notification queue.
 }
 
 void
@@ -47,7 +47,6 @@ UserStorageHandler::~UserStorageHandler() {
     while (!this->_queue.empty()) {
         Poco::Thread::sleep(100);
     }
-
     // tell workers they're done
     this->_queue.wakeUpAll();
 
@@ -57,7 +56,7 @@ UserStorageHandler::~UserStorageHandler() {
 }
 
 /*
- * create new uer profile and store in KC.
+ * create new user profile and store in KC.
  *   
  */
 int32_t
@@ -75,7 +74,6 @@ UserStorageHandler::createUser(const UserProfile& user) {
     std::string binaryString = serialize(zId);
     std::string sid = binaryString;
     std::string serialized_string = this->serialize(usert);
-
 
     this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
 

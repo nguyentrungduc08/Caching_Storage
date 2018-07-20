@@ -6,3 +6,5 @@ this project using for implement and practing using some framework and library l
 (notification queue).
 
 * Cache on Ram 1000 user more active. 
+ --daemon
+

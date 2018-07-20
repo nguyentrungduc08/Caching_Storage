@@ -28,7 +28,6 @@
 #include <boost/make_shared.hpp>
 
 #include "UserStorageHandler.h"
-//#include "LRUCache/LRUCache.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -53,7 +52,6 @@ public:
     CacheSubsystem() {
         std::cout << "create Cache module" << std::endl;
     }
-
     ~CacheSubsystem() {
 
     }
@@ -83,29 +81,59 @@ protected:
     }
 };
 
-class UserProfileStorageService : public Poco::Util::ServerApplication {
+class ConfigurationSubsystem : public Poco::Util::Subsystem {
 public:
 
+    ConfigurationSubsystem() {
+        std::cout << "create Configuration module" << std::endl;
+    }
+    ~ConfigurationSubsystem() {
+
+    }
+protected:
+
+    void initialize(Poco::Util::Application &app) {
+        std::cout << "initialize subsystem cache service" << std::endl;
+        Zcache::getInstance().setSize(12345);
+    }
+
+    void reinitialize(Poco::Util::Application &app) {
+    }
+
+    void release() {
+        std::cout << "release subsystem cache service" << std::endl;
+    }
+
+    virtual void defineOptions(OptionSet& options) {
+    }
+
+    virtual const char* name() const {
+        return "Configuration Subsystem";
+    }
+
+    void uninitialize() {
+        std::cout << "uninitialize subsystem cache service" << std::endl;
+    }
+};
+
+class UserProfileStorageService : public Poco::Util::ServerApplication {
+public:
     UserProfileStorageService() : _helpRequested(false) {
         std::cout << "Start POCO Application service..." << std::endl;
-        this->_host = "localhost";
-        this->_port = 9090;
         this->_helpRequested = false;
-
     }
 
 protected:
     void
     initialize(Application& self) {
         loadConfiguration(); // load default configuration files, if present
-
         //add subsystem
-        // addSubsystem(new CacheSubsystem());
         addSubsystem(&this->_cacheSubsystem);
+        Zconfiguration::getInstance().loadConfig();
 
         Application::initialize(self);
-
-        // add your own initialization code here
+        
+        std::cout << "______log in initializer" << std::endl;
     }
 
     void
@@ -143,6 +171,13 @@ protected:
                 .repeatable(false)
                 .argument("<host>")
                 .callback(OptionCallback<UserProfileStorageService>(this, &UserProfileStorageService::setHost)));
+        
+        options.addOption(
+                Option("configuration", "conf", "default (localhost)")
+                .required(false)
+                .repeatable(false)
+                .argument("<conf>")
+                .callback(OptionCallback<UserProfileStorageService>(this, &UserProfileStorageService::setConf)));
 
         options.addOption(
                 Option("bind", "b", "bind option value to test.property")
@@ -159,6 +194,11 @@ protected:
         stopOptionsProcessing();
     }
 
+    void 
+    setConf(const std::string& name, const std::string& value) {
+        std::cout << "set config - " << value << " - " << name << std::endl;
+    }    
+    
     void
     setPort(const std::string& name, const std::string& value) {
         std::cout << "set port - " << value << " - " << name << std::endl;
@@ -193,20 +233,21 @@ protected:
     }
 
 private:
-    bool _helpRequested;
-    int _port;
-    std::string _host;
-    CacheSubsystem _cacheSubsystem;
-
+    bool            _helpRequested;
+    int             _port;
+    std::string     _host;
+    std::string     _pathConfigFile;
+    CacheSubsystem  _cacheSubsystem;
+    
     void
     runTSimpleServer() {
         std::cout << "runTSimpleServer" << std::endl;
         int port = 9090;
-        shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-        shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-        shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-        shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-        shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+        shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
+        shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
+        shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
+        shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
+        shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory());
 
         TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
         server.serve();
@@ -218,11 +259,11 @@ private:
     runTThreadedServer() {
         std::cout << "runTThreadedServer" << std::endl;
         int port = 9090;
-        shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-        shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-        shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-        shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-        shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+        shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
+        shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
+        shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
+        shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
+        shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory());
 
         TThreadedServer server(processor, serverTransport, transportFactory, protocolFactory);
         server.serve();
@@ -233,14 +274,14 @@ private:
     runTThreadPoolServer() {
         std::cout << "runTThreadPoolServer" << std::endl;
         int port = 9090;
-        shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-        shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-        shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-        shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-        shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+        shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
+        shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
+        shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
+        shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
+        shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory());
 
-        shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(15);
-        shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
+        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(15);
+        shared_ptr<PosixThreadFactory> threadFactory    = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
         threadManager->threadFactory(threadFactory);
         threadManager->start();
 
@@ -253,14 +294,14 @@ private:
     runTNonblockingServer() {
         std::cout << "runTNonblockingServer" << std::endl;
         int port = 9090;
-        shared_ptr<UserStorageHandler> handler(new UserStorageHandler());
-        shared_ptr<TProcessor> processor(new UserStorageProcessor(handler));
-        shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-        shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-        shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+        shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
+        shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
+        shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
+        shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
+        shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory());
 
-        shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(15);
-        shared_ptr<PosixThreadFactory> threadFactory = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
+        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(15);
+        shared_ptr<PosixThreadFactory> threadFactory    = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
         threadManager->threadFactory(threadFactory);
         threadManager->start();
 
@@ -269,6 +310,7 @@ private:
         return;
     }
 };
+
 
 //POCO_APP_MAIN(UserProfileStorageService)
 

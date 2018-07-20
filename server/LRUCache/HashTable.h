@@ -206,7 +206,6 @@ public:
         }
         return false;
     }
-     
 };
 
 #endif	/* HASHTABLE_H */
