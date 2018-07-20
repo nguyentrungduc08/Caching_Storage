@@ -15,11 +15,11 @@ UserStorageHandler::UserStorageHandler() {
     u.name = "test";
     u.age = 1;
     u.gender = 1;
-    Zcache::getInstance().add(0, u);
+    Zcache::getInstance().add(0, u);    
 
     UserProfile e;
     Zcache::getInstance().get(0, e);
-    std::cout << "hello " << e.name << std::endl;
+    std::cout << "hello " << e.name << std::endl;   
 
     this->_thread.start(*this);
 }

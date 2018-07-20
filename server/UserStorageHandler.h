@@ -59,16 +59,13 @@ private:
     LRUCache<int, UserProfile> _cache;
 
 private:
-
     Zcache() {
         std::cout << "construct create Cache" << std::endl;
     }
-    
     Zcache(const Zcache& );
     void operator=(const Zcache&);
 
 public:
-
     ~Zcache() {
         std::cout << "destructor release Cache" << std::endl;
     }
@@ -91,6 +88,11 @@ public:
     void get(const int &key, UserProfile &data) {
         this->_cache.get(key, data);
     }
+    
+    bool find(const int &key) {
+        return this->_cache.find(key);
+    }
+    
 };
 
 
@@ -98,7 +100,6 @@ class NotificationStoreProfile : public Poco::Notification {
 public:
 
     NotificationStoreProfile(std::string key, std::string data, putOption::type opt) : _key(key), _data(data), _putType(opt) {
-
     }
 
     std::string getKey() const {
@@ -114,9 +115,9 @@ public:
     }
 
 private:
-    std::string _key;
-    std::string _data;
-    putOption::type _putType;
+    std::string         _key;
+    std::string         _data;
+    putOption::type     _putType;
 };
 
 
@@ -142,9 +143,9 @@ public:
     }
     
 private:
-    std::string _key;
-    std::string _data;
-    putOption::type _putType;
+    std::string         _key;
+    std::string         _data;
+    putOption::type     _putType;
 };
 
 
@@ -154,21 +155,21 @@ public:
     UserStorageHandler(const UserStorageHandler& orig);
     virtual ~UserStorageHandler();
 
-    int32_t createUser(const UserProfile& user);
-    void getUser(UserProfile& _return, const int32_t uid);
-    int32_t editUser(const int32_t uid, const UserProfile& user);
-    std::string serialize(UserProfile& obj);
-    std::string serialize(idcounter uid);
-    idcounter deserializeID(std::string binaryString);
-    UserProfile deserialize(std::string serializeString);
+    int32_t         createUser(const UserProfile& user);
+    void            getUser(UserProfile& _return, const int32_t uid);
+    int32_t         editUser(const int32_t uid, const UserProfile& user);
+    std::string     serialize(UserProfile& obj);
+    std::string     serialize(idcounter uid);
+    idcounter       deserializeID(std::string binaryString);
+    UserProfile     deserialize(std::string serializeString);
 
-    void run();
+    void            run();
 
 private:
-    void showProfile(const UserProfile& profile);
+    void            showProfile(const UserProfile& profile);
 
-    NotificationQueue _queue;
-    Poco::Thread _thread;
+    NotificationQueue   _queue;
+    Poco::Thread        _thread;
 };
 
 
