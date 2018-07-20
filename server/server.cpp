@@ -28,7 +28,7 @@
 #include <boost/make_shared.hpp>
 
 #include "UserStorageHandler.h"
-#include "LRUCache/LRUCache.h"
+//#include "LRUCache/LRUCache.h"
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
@@ -43,79 +43,75 @@ using Poco::Util::HelpFormatter;
 using Poco::Util::AbstractConfiguration;
 using Poco::Util::OptionCallback;
 
-
 using boost::shared_ptr;
 
 using namespace ::Task1;
 
 class CacheSubsystem : public Poco::Util::Subsystem {
-private:
-    LRUCache<int , UserProfile> _cache;
-public: 
-    CacheSubsystem(){
+public:
+
+    CacheSubsystem() {
         std::cout << "create Cache module" << std::endl;
     }
-    
+
     ~CacheSubsystem() {
-        
+
     }
 protected:
+
     void initialize(Poco::Util::Application &app) {
         std::cout << "initialize subsystem cache service" << std::endl;
+        Zcache::getInstance().setSize(12345);
     }
+
     void reinitialize(Poco::Util::Application &app) {
-        
     }
+
     void release() {
         std::cout << "release subsystem cache service" << std::endl;
     }
-    
+
     virtual void defineOptions(OptionSet& options) {
-        
     }
 
     virtual const char* name() const {
         return "Cache Subsystem";
     }
-    
+
     void uninitialize() {
         std::cout << "uninitialize subsystem cache service" << std::endl;
     }
-
-private:
-    static CacheSubsystem obj;
 };
-
 
 class UserProfileStorageService : public Poco::Util::ServerApplication {
 public:
+
     UserProfileStorageService() : _helpRequested(false) {
         std::cout << "Start POCO Application service..." << std::endl;
         this->_host = "localhost";
         this->_port = 9090;
         this->_helpRequested = false;
-        
+
     }
 
 protected:
-
     void
     initialize(Application& self) {
         loadConfiguration(); // load default configuration files, if present
-        
+
         //add subsystem
         // addSubsystem(new CacheSubsystem());
         addSubsystem(&this->_cacheSubsystem);
-        
+
         Application::initialize(self);
-        
+
         // add your own initialization code here
     }
 
     void
     uninitialize() {
         // add your own uninitialization code here
-        Application::uninitialize();    
+        Application::uninitialize();
     }
 
     void
@@ -197,10 +193,10 @@ protected:
     }
 
 private:
-    bool            _helpRequested;
-    int             _port;
-    std::string     _host;
-    CacheSubsystem  _cacheSubsystem;
+    bool _helpRequested;
+    int _port;
+    std::string _host;
+    CacheSubsystem _cacheSubsystem;
 
     void
     runTSimpleServer() {

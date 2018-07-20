@@ -28,6 +28,8 @@
 #include "KC_GenID/WZ_GenIdService.h"
 #include "KC_Storage/WZ_StorageService.h"
 #include "KC_Storage/KC_Storage.h"
+#include "LRUCache/LRUCache.h"
+#include "LRUCache/LRUCache.cpp"
 
 #include "Poco/Notification.h"
 #include "Poco/NotificationQueue.h"
@@ -51,6 +53,46 @@ using Poco::Runnable;
 using boost::shared_ptr;
 
 using namespace ::Task1;
+
+class Zcache {
+private:
+    LRUCache<int, UserProfile> _cache;
+
+private:
+
+    Zcache() {
+        std::cout << "construct create Cache" << std::endl;
+    }
+    
+    Zcache(const Zcache& );
+    void operator=(const Zcache&);
+
+public:
+
+    ~Zcache() {
+        std::cout << "destructor release Cache" << std::endl;
+    }
+
+    static Zcache& getInstance() {
+        static Zcache instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    }
+
+    void setSize(const int &Zsize) {
+        this->_cache.setCacheSize(Zsize);
+    }
+
+    void add(const int &key, UserProfile data) {
+        this->_cache.add(key, data);
+    }
+    
+
+    void get(const int &key, UserProfile &data) {
+        this->_cache.get(key, data);
+    }
+};
+
 
 class NotificationStoreProfile : public Poco::Notification {
 public:

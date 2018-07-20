@@ -10,39 +10,49 @@
 UserStorageHandler::UserStorageHandler() {
     // Your initialization goes here
     std::cout << "Server Starting........." << std::endl;
-    
+    UserProfile u;
+    u.uid = 0;
+    u.name = "test";
+    u.age = 1;
+    u.gender = 1;
+    Zcache::getInstance().add(0, u);
+
+    UserProfile e;
+    Zcache::getInstance().get(0, e);
+    std::cout << "hello " << e.name << std::endl;
+
     this->_thread.start(*this);
-    
 }
 
-void 
+void
 UserStorageHandler::run() {
-        AutoPtr<Notification> pNf(_queue.waitDequeueNotification()); //
-        while (pNf) {
-            NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*>(pNf.get()); //get notification from NotificationQueue
-            if (pWorkNf && ThreadPool::defaultPool().available() > 0) {
-                shared_ptr<Z_Worker> worker(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption()));
-                ThreadPool::defaultPool().start( *(worker.get()) ); // set task for Worker
-                pNf = _queue.waitDequeueNotification(); // get Net nofitication if available in queue
-            } 
+    std::cout << "log thread run to get notifications" << std::endl;
+    AutoPtr<Notification> pNf(_queue.waitDequeueNotification()); //
+    while (pNf) {
+        NotificationStoreProfile* pWorkNf = dynamic_cast<NotificationStoreProfile*> (pNf.get()); //get notification from NotificationQueue
+        if (pWorkNf && ThreadPool::defaultPool().available() > 0) {
+            shared_ptr<Z_Worker> worker(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption()));
+            ThreadPool::defaultPool().start(*(worker.get())); // set task for Worker
+            pNf = _queue.waitDequeueNotification(); // get Net nofitication if available in queue
         }
+    }
 }
 
 UserStorageHandler::UserStorageHandler(const UserStorageHandler& orig) {
-    
+
 }
 
 UserStorageHandler::~UserStorageHandler() {
     // wait until all work is done
-    while (!this->_queue.empty()){ 
+    while (!this->_queue.empty()) {
         Poco::Thread::sleep(100);
     }
-    
+
     // tell workers they're done
-    this->_queue.wakeUpAll(); 
-    
+    this->_queue.wakeUpAll();
+
     ThreadPool::defaultPool().joinAll();
-    
+
     std::cout << "Server shutdown!!! " << std::endl;
 }
 
@@ -65,10 +75,10 @@ UserStorageHandler::createUser(const UserProfile& user) {
     std::string binaryString = serialize(zId);
     std::string sid = binaryString;
     std::string serialized_string = this->serialize(usert);
-    
-    
+
+
     this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
-    
+
     if (true) {
         std::cout << "Store user's profile success" << std::endl;
         return zId;
@@ -77,7 +87,7 @@ UserStorageHandler::createUser(const UserProfile& user) {
     }
 }
 
-void 
+void
 UserStorageHandler::getUser(UserProfile& _return, const int32_t uid) {
     // Your implementation goes here
     printf("getUser\n");
@@ -100,7 +110,7 @@ UserStorageHandler::getUser(UserProfile& _return, const int32_t uid) {
 
 }
 
-int32_t 
+int32_t
 UserStorageHandler::editUser(const int32_t uid, const UserProfile& user) {
     printf("editUser \n");
     UserProfile uProfile = user;
@@ -119,7 +129,7 @@ UserStorageHandler::editUser(const int32_t uid, const UserProfile& user) {
     return -1;
 }
 
-std::string 
+std::string
 UserStorageHandler::serialize(UserProfile& obj) {
     shared_ptr<TMemoryBuffer> transportOut(new TMemoryBuffer());
     shared_ptr<TBinaryProtocol> protocolOut(new TBinaryProtocol(transportOut));
@@ -128,7 +138,7 @@ UserStorageHandler::serialize(UserProfile& obj) {
     return serialized_string;
 }
 
-std::string 
+std::string
 UserStorageHandler::serialize(idcounter uid) {
     std::string binaryString(4, '\n');
     for (int i = 0; i < 4; i++)
@@ -136,12 +146,12 @@ UserStorageHandler::serialize(idcounter uid) {
     return binaryString;
 }
 
-idcounter 
+idcounter
 UserStorageHandler::deserializeID(std::string binaryString) {
-    
+
 }
 
-UserProfile 
+UserProfile
 UserStorageHandler::deserialize(std::string serializeString) {
     shared_ptr<TMemoryBuffer> strBuffer(new TMemoryBuffer());
     shared_ptr<TBinaryProtocol> binaryProtcol(new TBinaryProtocol(strBuffer));
@@ -154,9 +164,9 @@ UserStorageHandler::deserialize(std::string serializeString) {
 
 void
 UserStorageHandler::showProfile(const UserProfile& profile) {
-    std::cout << "Detail User's Profile"            << std::endl;
-    std::cout << "- UId: "      << profile.uid      << std::endl;
-    std::cout << "- Name: "     << profile.name     << std::endl;
-    std::cout << "- age: "      << profile.age      << std::endl;
-    std::cout << "- gender: "   << profile.gender   << std::endl;
+    std::cout << "Detail User's Profile" << std::endl;
+    std::cout << "- UId: " << profile.uid << std::endl;
+    std::cout << "- Name: " << profile.name << std::endl;
+    std::cout << "- age: " << profile.age << std::endl;
+    std::cout << "- gender: " << profile.gender << std::endl;
 }

@@ -30,6 +30,10 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
       <logicalFolder name="f2" displayName="KC_GenIdService" projectFiles="true">
         <itemPath>server/KC_GenID/KC_GenID.cpp</itemPath>
         <itemPath>server/KC_GenID/WZ_GenIdService.cpp</itemPath>
@@ -47,13 +51,9 @@
       </logicalFolder>
       <itemPath>server/UserStorage.cpp</itemPath>
       <itemPath>server/UserStorageHandler.cpp</itemPath>
+      <itemPath>server/server.cpp</itemPath>
       <itemPath>server/user_profile_constants.cpp</itemPath>
       <itemPath>server/user_profile_types.cpp</itemPath>
-    </logicalFolder>
-    <logicalFolder name="SourceFiles"
-                   displayName="Source Files"
-                   projectFiles="true">
-      <itemPath>server/server.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
