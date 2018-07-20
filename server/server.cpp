@@ -94,7 +94,11 @@ protected:
 
     void initialize(Poco::Util::Application &app) {
         std::cout << "initialize subsystem cache service" << std::endl;
-        Zcache::getInstance().setSize(12345);
+        int check = Zconfiguration::getInstance().loadConfig();
+        if (check != 0){
+            std::cout << "FAIL" << std::endl;
+        } 
+        std::cout << "OK" << std::endl;
     }
 
     void reinitialize(Poco::Util::Application &app) {
