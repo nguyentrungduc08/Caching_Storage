@@ -133,10 +133,9 @@ protected:
         loadConfiguration(); // load default configuration files, if present
         //add subsystem
         addSubsystem(&this->_cacheSubsystem);
-        Zconfiguration::getInstance().loadConfig();
-
-        Application::initialize(self);
-        
+        addSubsystem(&this->_confSubsystem);
+        Zcache::getInstance();
+        Application::initialize(self);        
         std::cout << "______log in initializer" << std::endl;
     }
 
@@ -237,11 +236,12 @@ protected:
     }
 
 private:
-    bool            _helpRequested;
-    int             _port;
-    std::string     _host;
-    std::string     _pathConfigFile;
-    CacheSubsystem  _cacheSubsystem;
+    bool                    _helpRequested;
+    int                     _port;
+    std::string             _host;
+    std::string             _pathConfigFile;
+    CacheSubsystem          _cacheSubsystem;
+    ConfigurationSubsystem  _confSubsystem;
     
     void
     runTSimpleServer() {

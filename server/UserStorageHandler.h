@@ -126,8 +126,8 @@ public:
 private:
     void            showProfile(const UserProfile& profile);
 
-    NotificationQueue   _queue;
-    Poco::Thread        _thread;
+    NotificationQueue           _queue;
+    Poco::Thread                _thread;
 };
 
 

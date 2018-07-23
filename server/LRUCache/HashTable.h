@@ -85,7 +85,7 @@ public:
      */
     HashTable() {
         this->_hashTable = new HashNode<Tkey, Tvalue> *[HashTableSize]();
-        for(int i = 0; i < HashTableSize; ++i){
+        for(int i = 0; i < HashTableSize; ++i) {
             this->_hashTable[i] = NULL;
         }
         this->_size = 0;

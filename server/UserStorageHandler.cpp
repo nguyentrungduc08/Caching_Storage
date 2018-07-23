@@ -9,19 +9,9 @@
 
 UserStorageHandler::UserStorageHandler() {
     // Your initialization goes here
-    std::cout << "Server Starting........." << std::endl;
-//    UserProfile u;
-//    u.uid = 0;
-//    u.name = "test";
-//    u.age = 1;
-//    u.gender = 1;
-//    Zcache::getInstance().add(0, u);    
-//
-//    UserProfile e;
-//    Zcache::getInstance().get(0, e);
-//    std::cout << "hello " << e.name << std::endl;   
-
-    this->_thread.start(*this); // start thread waiting to handle notification queue.
+    std::cout << "Server Starting........." << std::endl; 
+    // start thread waiting to handle notification queue.
+    this->_thread.start(*this); 
 }
 
 void
@@ -57,7 +47,9 @@ UserStorageHandler::~UserStorageHandler() {
 
 /*
  * create new user profile and store in KC.
- *   
+ * - get information submit from client
+ * - serialize data (int -> binary string, object -> binary string)
+ * - put to notification queue.    
  */
 int32_t
 UserStorageHandler::createUser(const UserProfile& user) {
@@ -76,13 +68,9 @@ UserStorageHandler::createUser(const UserProfile& user) {
     std::string serialized_string = this->serialize(usert);
 
     this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
-
-    if (true) {
-        std::cout << "Store user's profile success" << std::endl;
-        return zId;
-    } else {
-        return -1;
-    }
+    
+    std::cout << "Store user's profile success" << std::endl;
+    return zId;
 }
 
 void
@@ -139,14 +127,28 @@ UserStorageHandler::serialize(UserProfile& obj) {
 std::string
 UserStorageHandler::serialize(idcounter uid) {
     std::string binaryString(4, '\n');
-    for (int i = 0; i < 4; i++)
-        binaryString[3 - i] = (uid >> (i * 8));
+    
+    std::string ss = std::bitset< 32 >( uid ).to_string();
+    for(int i = 0; i < 4; ++i) {
+        std::string tmp(8,'\0');
+        for(int j = (i*8); j < ((i+1)*8); ++j)
+            tmp[j- (i*8)] = ss[j];
+        std::cout << tmp << std::endl;
+        binaryString[3 - i] = std::bitset<8>(tmp).to_ulong();
+    }
+
     return binaryString;
 }
 
 idcounter
 UserStorageHandler::deserializeID(std::string binaryString) {
-
+    int32_t res = 0;
+    for(int i = 0; i < 4; ++i){
+        int32_t tmp = std::bitset<8>((int32_t) binaryString[i] ).to_ulong();
+        std::cout << std::bitset<8>((int32_t) binaryString[i] ).to_string() << std::endl;
+        res+= (tmp << (i*8));
+    }
+    return res;
 }
 
 UserProfile
