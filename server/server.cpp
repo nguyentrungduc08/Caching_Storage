@@ -134,7 +134,7 @@ protected:
         //add subsystem
         addSubsystem(&this->_cacheSubsystem);
         addSubsystem(&this->_confSubsystem);
-        Zcache::getInstance();
+//        Zlocker::getInstance().alocateMemory(Zconfiguration::getInstance().getNumLocker());
         Application::initialize(self);        
         std::cout << "______log in initializer" << std::endl;
     }
@@ -226,11 +226,12 @@ protected:
     int
     main(const ArgVec& args) {
         std::cout << "begin main" << std::endl;
+        Zlocker::getInstance().alocateMemory(Zconfiguration::getInstance().getNumLocker());
         if (!_helpRequested) {
-            runTSimpleServer();
-            //            runTThreadedServer();
-            //            runTThreadPoolServer();
-            //            runTNonblockingServer();
+//            runTSimpleServer();
+//            runTThreadedServer();
+//            runTThreadPoolServer();
+            runTNonblockingServer();
         }
         return Application::EXIT_OK;
     }
@@ -304,7 +305,7 @@ private:
         shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
         shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory());
 
-        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(15);
+        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(8);
         shared_ptr<PosixThreadFactory> threadFactory    = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
         threadManager->threadFactory(threadFactory);
         threadManager->start();

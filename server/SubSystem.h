@@ -177,19 +177,27 @@ private:
 
 class Zlocker {
 private: 
-    static Poco::Mutex *m_locker;
-    
+    Poco::Mutex     *m_locker;
+    int32_t         m_size;
     Zlocker() {
-        this->m_locker = new Poco::Mutex[Zconfiguration::getInstance().getNumLocker()];
     }
     
     Zlocker(const Zlocker& );
     void operator=(const Zlocker&);
     
-    int keyLocker(const int & key){
-        return key % Zconfiguration::getInstance().getNumLocker();
+    int32_t keyLocker(const int32_t & key){
+        return key % this->m_size;
     }
     
+    int32_t deserializeID(std::string binaryString) {
+        int32_t res = 0;
+        for(int i = 0; i < 4; ++i){
+            int32_t tmp = std::bitset<8>((int32_t) binaryString[i] ).to_ulong();
+            res+= (tmp << (i*8));
+        }
+        return res;
+    }
+
 public:
     static Zlocker& getInstance(){
         static Zlocker instance;
@@ -197,11 +205,18 @@ public:
         return instance;
     }
     
-    Poco::Mutex &operator [](int index) {
+    void alocateMemory(int _size){
+        this->m_locker = new Poco::Mutex[_size];
+        this->m_size = _size;
+        std::cout << "created locker with size: " << this->m_size << std::endl;
+    }
+    
+    Poco::Mutex &operator [](std::string key) {
+        int index = keyLocker( deserializeID(key) );
+        std::cout << "in locker: " << index << std::endl;
         return this->m_locker[index];
     }
 };
-
 
 #endif	/* SUBSYSTEM_H */
 

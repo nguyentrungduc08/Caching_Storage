@@ -94,10 +94,14 @@ public:
     virtual ~Z_Worker(){
         std::cout << "remove worker" << std::endl;
     } 
-    
+    //thread-safe write data.
     void run() {
+        Zlocker::getInstance()[this->_key].lock();
         WZ_StorageService wzStorage;
         bool ok = wzStorage.W_put(this->_key, this->_data, this->_putType);
+//        Poco::Thread::sleep(5);
+        std::cout << "log check thread-safe" << this->_key << std::endl;
+        Zlocker::getInstance()[this->_key].unlock();
     }
     
 private:

@@ -63,7 +63,7 @@ UserStorageHandler::createUser(const UserProfile& user) {
     usert.__set_uid(zId);
     this->showProfile(usert);
 
-    std::string binaryString = serialize(zId);
+    std::string binaryString = this->serialize(zId);
     std::string sid = binaryString;
     std::string serialized_string = this->serialize(usert);
 
@@ -80,7 +80,7 @@ UserStorageHandler::getUser(UserProfile& _return, const int32_t uid) {
     UserProfile tmp;
     tmp.__set_uid(-1);
 
-    std::string binaryString = serialize(uid);
+    std::string binaryString = this->serialize(uid);
     std::string sid = binaryString;
     std::string raw;
 
@@ -133,7 +133,6 @@ UserStorageHandler::serialize(idcounter uid) {
         std::string tmp(8,'\0');
         for(int j = (i*8); j < ((i+1)*8); ++j)
             tmp[j- (i*8)] = ss[j];
-        std::cout << tmp << std::endl;
         binaryString[3 - i] = std::bitset<8>(tmp).to_ulong();
     }
 
@@ -145,7 +144,6 @@ UserStorageHandler::deserializeID(std::string binaryString) {
     int32_t res = 0;
     for(int i = 0; i < 4; ++i){
         int32_t tmp = std::bitset<8>((int32_t) binaryString[i] ).to_ulong();
-        std::cout << std::bitset<8>((int32_t) binaryString[i] ).to_string() << std::endl;
         res+= (tmp << (i*8));
     }
     return res;
@@ -167,6 +165,6 @@ UserStorageHandler::showProfile(const UserProfile& profile) {
     std::cout << "Detail User's Profile" << std::endl;
     std::cout << "- UId: " << profile.uid << std::endl;
     std::cout << "- Name: " << profile.name << std::endl;
-    std::cout << "- age: " << profile.age << std::endl;
-    std::cout << "- gender: " << profile.gender << std::endl;
+    std::cout << "- Age: " << profile.age << std::endl;
+    std::cout << "- Gender: " << profile.gender << std::endl;
 }
