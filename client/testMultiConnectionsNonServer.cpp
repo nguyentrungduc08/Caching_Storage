@@ -6,7 +6,6 @@ using
 [num] - number of turns request to server
 
 */
-
 #include <bits/stdc++.h>
 #include <sys/time.h>
 #include <thread>
@@ -42,17 +41,19 @@ get_timestamp ()
       	return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
 }
 
-int numTurn;
-bool resultTest;
+int 	numTurn;
+bool 	resultTest;
 
 //protype function
-bool 		parseInputParameter(int argc, char **argv);
-int		getCMD();
-std::string	genName();
+bool 			parseInputParameter(int argc, char **argv);
+int				getCMD();
+int 			getAge();
+int				getGender();
+std::string		getName();
 
 void 		task();
 
-#define NumCon 1000 
+#define NumCon 10
 
 int main(int argc, char **argv){
 		
@@ -66,8 +67,6 @@ int main(int argc, char **argv){
 
 	timestamp_t t0 = get_timestamp();
 	
-
-	
 	for(int i = 0; i < NumCon; ++i){
 		 myThreads[i] = std::thread(task);
 	}	
@@ -78,7 +77,7 @@ int main(int argc, char **argv){
 		
 	timestamp_t t1 = get_timestamp();
 	double secs = (t1 - t0) / 1000000.0L;		
-	std::cout << "time add prifile " << secs << std::endl;
+	std::cout << "time add profile " << secs << std::endl;
 	
 	return 0;
 }
@@ -86,34 +85,46 @@ int main(int argc, char **argv){
 void
 task(){
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
-    	//boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-    	boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
-
+	boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
 	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
 	UserStorageClient client(protocol);
+	std::vector<int> _listID;
 	try{ 
-    		transport->open();
-			
-		UserProfile profile;	
+    	transport->open();	
 
-		profile.name 	= "abcdddddadf";
-		profile.age 	= 123;
-		profile.gender  = 1;
-		int32_t res = client.createUser(profile); 							
-				
+		for(int i = 0; i < numTurn; ++i){
+			int cmd = getCMD();
+			switch(cmd) {
+				case 1: {
+						UserProfile profile;
+						profile.name 	= getName();
+						profile.age 	= getAge();
+						profile.gender	= getGender();	
+						int res = client.createUser(profile);
+					}		
+					break;	
+				case 2: {
+						int id = rand() % 10 + 1;
+						UserProfile u;
+						client.getUser(u, id);
+					}
+					break;
+			}
+		}
+
 		std::cout << "DONE" << std::endl;
 		transport->close();
     	
 	}catch (TException &tx){
       		std::cout<<"Error: " <<tx.what() <<std::endl;
-    	}
+    }
 }
 
 bool
 parseInputParameter(int argc, char **argv){
 	if (argc < 2){
 		std::cout << "Using ./testclient [num]" << std::endl;
-		numTurn = 100000;
+		numTurn = 15;
 		return false;
 	}
 	
@@ -126,5 +137,30 @@ parseInputParameter(int argc, char **argv){
 
 int	
 getCMD(){
-	return rand() % 3 + 1;
+	return rand() % 2 + 1;
+}
+
+int 		
+getAge(){
+	return rand() % 100 + 1; 
+}
+
+std::string	
+getName(){
+	static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+        
+	int len = rand()%30 + 1;
+	std::string name;
+	for(int i = 0; i < len; ++i){
+		name += alphanum[rand() % (sizeof(alphanum) - 1)];
+	}
+	return name;
+}
+
+int
+getGender(){
+	return rand() % 3;
 }

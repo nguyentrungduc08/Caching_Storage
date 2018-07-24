@@ -110,7 +110,6 @@ private:
     putOption::type     _putType;
 };
 
-
 class UserStorageHandler : virtual public UserStorageIf, Poco::Runnable {
 public:
     UserStorageHandler();

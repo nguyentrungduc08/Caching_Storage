@@ -38,7 +38,6 @@ int main(int argc, char **argv){
 
 	try{ 
     		transport->open();
-		
 			
 		do {
 			printMenuOption();
