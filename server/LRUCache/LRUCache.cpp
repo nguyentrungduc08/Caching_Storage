@@ -23,15 +23,12 @@ template<class Tkey, class Tvalue>
 void 
 LRUCache<Tkey, Tvalue>::add(const Tkey& key, Tvalue value) {
     if (!this->_hashTable.find(key)){ // neu key khong ton tai trong cache
-        std::cout << "cache miss" << std::endl;
         if (this->_list.size() == this->_cacheSize ) {// cache full
-            std::cout << "cache full" << std::endl;
             Node<Tkey, Tvalue>* last = this->_list.getBack();
             this->_hashTable.remove(last->_key);
             this->_list.popBack();
         }    
     } else { // neu key da ton tai trong cache
-        std::cout << "cache hit" << std::endl;
         Node<Tkey, Tvalue>* ptrNode;
         this->_hashTable.get(key, ptrNode);
         this->_hashTable.remove(ptrNode->_key);

@@ -99,7 +99,7 @@ public:
         Zlocker::getInstance()[this->_key].lock();
         WZ_StorageService wzStorage;
         bool ok = wzStorage.W_put(this->_key, this->_data, this->_putType);
-//        Poco::Thread::sleep(5);
+        Poco::Thread::sleep(5000);
         std::cout << "log check thread-safe" << this->_key << std::endl;
         Zlocker::getInstance()[this->_key].unlock();
     }
@@ -133,8 +133,6 @@ private:
     NotificationQueue           _queue;
     Poco::Thread                _thread;
 };
-
-
 
 #endif	/* USERSTORAGEHANDLER_H */
 

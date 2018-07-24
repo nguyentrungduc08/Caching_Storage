@@ -84,16 +84,23 @@ UserStorageHandler::getUser(UserProfile& _return, const int32_t uid) {
     std::string sid = binaryString;
     std::string raw;
 
-    WZ_StorageService wzStorage;
-    raw = wzStorage.W_get(sid);
-    if (raw != "") {
-        UserProfile tmpUser = deserialize(raw);
-        _return = tmpUser;
-        this->showProfile(tmpUser);
+    if (Zcache::getInstance().find(uid) ) {
+        std::cout << "****cache hit****" << std::endl;
+        Zcache::getInstance().get(uid, _return);
     } else {
-        _return = tmp;
+        std::cout << "----cache miss----" << std::endl;
+        WZ_StorageService wzStorage;
+        raw = wzStorage.W_get(sid);
+        if (raw != "") {
+            UserProfile tmpUser = deserialize(raw);
+            _return = tmpUser;
+            //update the profile to cache.
+            Zcache::getInstance().add(uid, tmpUser);// synchronizes
+            this->showProfile(tmpUser);
+        } else {
+            _return = tmp;
+        }
     }
-
 }
 
 int32_t
@@ -106,13 +113,14 @@ UserStorageHandler::editUser(const int32_t uid, const UserProfile& user) {
     std::string serialized_string = this->serialize(uProfile);
 
     KC_Storage::putOption::type opt = KC_Storage::putOption::type::update;
-    WZ_StorageService wzStorage;
-    bool ok = wzStorage.W_put(sid, serialized_string, opt);
+//    WZ_StorageService wzStorage;
+//    bool ok = wzStorage.W_put(sid, serialized_string, opt);
+    
+    this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
+    
     this->showProfile(uProfile);
-    if (ok) {
-        return uid;
-    }
-    return -1;
+
+    return uid;
 }
 
 std::string

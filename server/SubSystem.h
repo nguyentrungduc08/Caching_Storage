@@ -213,7 +213,6 @@ public:
     
     Poco::Mutex &operator [](std::string key) {
         int index = keyLocker( deserializeID(key) );
-        std::cout << "in locker: " << index << std::endl;
         return this->m_locker[index];
     }
 };
