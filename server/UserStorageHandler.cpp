@@ -23,6 +23,7 @@ UserStorageHandler::run() {
         if (pWorkNf && ThreadPool::defaultPool().available() > 0) {
             shared_ptr<Z_Worker> worker(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption()));
             ThreadPool::defaultPool().start(*(worker.get())); // set task for Worker
+            std::cout << "$$$$check crash" << std::endl;
             pNf = _queue.waitDequeueNotification(); // get Net nofitication if available in queue
         }
     }

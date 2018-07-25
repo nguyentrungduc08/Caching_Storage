@@ -41,7 +41,7 @@ get_timestamp ()
       	return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
 }
 
-int 	numTurn;
+
 bool 	resultTest;
 
 //protype function
@@ -51,24 +51,24 @@ int 			getAge();
 int				getGender();
 std::string		getName();
 
-void 		task();
+void 		task(const std::string &name);
 
-#define NumCon 10
+int 	numTurn = 30;
+#define NumCon 500	
 
 int main(int argc, char **argv){
 		
-	if (!parseInputParameter(argc, argv)){
-		return 0;
-	}
-
-	std::cout << "here1 " << std::endl;	
+	// if (!parseInputParameter(argc, argv)){
+	// 	return 0;
+	// }
 	
 	std::thread myThreads[NumCon];
 
 	timestamp_t t0 = get_timestamp();
 	
 	for(int i = 0; i < NumCon; ++i){
-		 myThreads[i] = std::thread(task);
+		std::string sname = "task" + i;
+		myThreads[i] = std::thread(task, std::ref(sname));
 	}	
 	
 	for(int i = 0; i < NumCon; ++i){
@@ -83,8 +83,9 @@ int main(int argc, char **argv){
 }
 
 void
-task(){
+task(const std::string &name){
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
+	// boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
 	boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
 	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
 	UserStorageClient client(protocol);
@@ -94,6 +95,7 @@ task(){
 
 		for(int i = 0; i < numTurn; ++i){
 			int cmd = getCMD();
+			std::cout << name << " case: " << i << "\n";
 			switch(cmd) {
 				case 1: {
 						UserProfile profile;

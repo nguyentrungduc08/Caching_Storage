@@ -302,10 +302,10 @@ private:
         shared_ptr<UserStorageHandler>  handler(new UserStorageHandler());
         shared_ptr<TProcessor>          processor(new UserStorageProcessor(handler));
         shared_ptr<TServerTransport>    serverTransport(new TServerSocket(port));
-        shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
+//        shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
         shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory());
 
-        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(8);
+        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(4);
         shared_ptr<PosixThreadFactory> threadFactory    = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
         threadManager->threadFactory(threadFactory);
         threadManager->start();

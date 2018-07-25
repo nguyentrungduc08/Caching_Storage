@@ -111,7 +111,7 @@ public:
     void 
     put(const Tkey &key, Tvalue value) {
         int hashValue = this->_hashFunction(key);
-        std::cout << "put log hashfunction: " << key << " - " << hashValue << std::endl;
+//        std::cout << "put log hashfunction: " << key << " - " << hashValue << std::endl;
         HashNode<Tkey, Tvalue> *prevBucket = NULL;
         HashNode<Tkey, Tvalue> *bucket = this->_hashTable[hashValue];
         
@@ -136,7 +136,7 @@ public:
     void 
     remove(const Tkey &key) {
         int hashValue = this->_hashFunction(key);
-        std::cout << "remove log hashfunction: " << key << " - " << hashValue << std::endl;
+//        std::cout << "remove log hashfunction: " << key << " - " << hashValue << std::endl;
         HashNode<Tkey, Tvalue> *prevBucket = NULL;
         HashNode<Tkey, Tvalue> *bucket = this->_hashTable[hashValue];
         
@@ -197,7 +197,6 @@ public:
     find(const Tkey& key) {
         int hashValue = this->_hashFunction(key);
         HashNode<Tkey, Tvalue> *bucket = this->_hashTable[hashValue];
-        std::cout << "find log hashfunction: " << key << " - " << hashValue << std::endl;
         while (bucket != NULL) {
             if (bucket->getKey() == key){
                 return true;

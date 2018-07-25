@@ -19,10 +19,10 @@ WZ_GenIdService::~WZ_GenIdService() {
 
 int64_t 
 WZ_GenIdService::W_genID(const std::string &keyType) {
-    boost::shared_ptr<TTransport> socket(new TSocket("localhost",6789));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
-    boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
-    KC_GenID::KC_GenIDClient client(protocol);
+    boost::shared_ptr<TTransport>   socket(new TSocket("localhost",6789));
+    boost::shared_ptr<TTransport>   transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TProtocol>    protocol(new TBinaryProtocol(transport));
+    KC_GenID::KC_GenIDClient        client(protocol);
     
     KC_GenID::Z_idGen result;
     try {
