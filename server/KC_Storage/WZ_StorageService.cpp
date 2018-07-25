@@ -19,7 +19,8 @@ WZ_StorageService::~WZ_StorageService() {
 int64_t
 WZ_StorageService::W_getTotalRecord() {
     boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+//    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
     boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     KC_StorageClient client(protocol);
     Z_total total;
@@ -40,7 +41,8 @@ WZ_StorageService::W_getTotalRecord() {
 std::string
 WZ_StorageService::W_get(const std::string &key) {
     boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+//    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
     boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     KC_StorageClient client(protocol);
     Z_data data;
@@ -62,7 +64,8 @@ WZ_StorageService::W_get(const std::string &key) {
 bool 
 WZ_StorageService::W_put(const std::string& key, const std::string& value, const putOption::type& opt) {
     boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+//    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
     boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     KC_StorageClient client(protocol);
     Z_status status;
@@ -80,7 +83,8 @@ WZ_StorageService::W_put(const std::string& key, const std::string& value, const
 bool
 WZ_StorageService::W_remove(const std::string& key) {
     boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9876));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+//    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
     boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     KC_StorageClient client(protocol);
     Z_status status;
