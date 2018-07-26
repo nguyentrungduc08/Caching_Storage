@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux-x86
+CND_PLATFORM=GNU-Linux
 CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
@@ -57,6 +57,10 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 TESTFILES= \
 	${TESTDIR}/TestFiles/f1
 
+# Test Object Files
+TESTOBJECTFILES= \
+	${TESTDIR}/tests/newsimpletest.o
+
 # C Compiler Flags
 CFLAGS=
 
@@ -81,72 +85,72 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/caching_storage: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/caching_storage ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/server/KC_GenID/KC_GenID.o: server/KC_GenID/KC_GenID.cpp 
+${OBJECTDIR}/server/KC_GenID/KC_GenID.o: server/KC_GenID/KC_GenID.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/KC_GenID.o server/KC_GenID/KC_GenID.cpp
 
-${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o: server/KC_GenID/WZ_GenIdService.cpp 
+${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o: server/KC_GenID/WZ_GenIdService.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/WZ_GenIdService.o server/KC_GenID/WZ_GenIdService.cpp
 
-${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o: server/KC_GenID/kc_genid_constants.cpp 
+${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o: server/KC_GenID/kc_genid_constants.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_constants.o server/KC_GenID/kc_genid_constants.cpp
 
-${OBJECTDIR}/server/KC_GenID/kc_genid_types.o: server/KC_GenID/kc_genid_types.cpp 
+${OBJECTDIR}/server/KC_GenID/kc_genid_types.o: server/KC_GenID/kc_genid_types.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_GenID
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_GenID/kc_genid_types.o server/KC_GenID/kc_genid_types.cpp
 
-${OBJECTDIR}/server/KC_Storage/KC_Storage.o: server/KC_Storage/KC_Storage.cpp 
+${OBJECTDIR}/server/KC_Storage/KC_Storage.o: server/KC_Storage/KC_Storage.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/KC_Storage.o server/KC_Storage/KC_Storage.cpp
 
-${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o: server/KC_Storage/WZ_StorageService.cpp 
+${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o: server/KC_Storage/WZ_StorageService.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/WZ_StorageService.o server/KC_Storage/WZ_StorageService.cpp
 
-${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o: server/KC_Storage/kc_storage_constants.cpp 
+${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o: server/KC_Storage/kc_storage_constants.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_constants.o server/KC_Storage/kc_storage_constants.cpp
 
-${OBJECTDIR}/server/KC_Storage/kc_storage_types.o: server/KC_Storage/kc_storage_types.cpp 
+${OBJECTDIR}/server/KC_Storage/kc_storage_types.o: server/KC_Storage/kc_storage_types.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/KC_Storage
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/KC_Storage/kc_storage_types.o server/KC_Storage/kc_storage_types.cpp
 
-${OBJECTDIR}/server/LRUCache/LRUCache.o: server/LRUCache/LRUCache.cpp 
+${OBJECTDIR}/server/LRUCache/LRUCache.o: server/LRUCache/LRUCache.cpp
 	${MKDIR} -p ${OBJECTDIR}/server/LRUCache
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/LRUCache/LRUCache.o server/LRUCache/LRUCache.cpp
 
-${OBJECTDIR}/server/UserStorage.o: server/UserStorage.cpp 
+${OBJECTDIR}/server/UserStorage.o: server/UserStorage.cpp
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorage.o server/UserStorage.cpp
 
-${OBJECTDIR}/server/UserStorageHandler.o: server/UserStorageHandler.cpp 
+${OBJECTDIR}/server/UserStorageHandler.o: server/UserStorageHandler.cpp
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/UserStorageHandler.o server/UserStorageHandler.cpp
 
-${OBJECTDIR}/server/server.o: server/server.cpp 
+${OBJECTDIR}/server/server.o: server/server.cpp
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/server.o server/server.cpp
 
-${OBJECTDIR}/server/user_profile_constants.o: server/user_profile_constants.cpp 
+${OBJECTDIR}/server/user_profile_constants.o: server/user_profile_constants.cpp
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_constants.o server/user_profile_constants.cpp
 
-${OBJECTDIR}/server/user_profile_types.o: server/user_profile_types.cpp 
+${OBJECTDIR}/server/user_profile_types.o: server/user_profile_types.cpp
 	${MKDIR} -p ${OBJECTDIR}/server
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/server/user_profile_types.o server/user_profile_types.cpp
@@ -155,10 +159,12 @@ ${OBJECTDIR}/server/user_profile_types.o: server/user_profile_types.cpp
 .build-subprojects:
 
 # Build Test Targets
-.build-tests-conf: .build-conf ${TESTFILES}
+.build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
+.build-tests-subprojects:
+
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/newsimpletest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   
 
 
 ${TESTDIR}/tests/newsimpletest.o: tests/newsimpletest.cpp 
@@ -361,7 +367,6 @@ ${OBJECTDIR}/server/user_profile_types_nomain.o: ${OBJECTDIR}/server/user_profil
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/caching_storage
 
 # Subprojects
 .clean-subprojects:

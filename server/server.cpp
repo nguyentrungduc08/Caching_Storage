@@ -316,7 +316,6 @@ private:
     }
 };
 
-
 //POCO_APP_MAIN(UserProfileStorageService)
 
 int main(int argc, char* argv[]) {
