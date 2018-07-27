@@ -23,7 +23,6 @@ UserStorageHandler::run() {
         if (pWorkNf && ThreadPool::defaultPool().available() > 0) {
             shared_ptr<Z_Worker> worker(new Z_Worker(pWorkNf->getKey(), pWorkNf->getData(), pWorkNf->getPutOption()));
             ThreadPool::defaultPool().start(*(worker.get())); // set task for Worker
-            std::cout << "$$$$check crash" << std::endl;
             pNf = _queue.waitDequeueNotification(); // get Net nofitication if available in queue
         }
     }
@@ -69,6 +68,8 @@ UserStorageHandler::createUser(const UserProfile& user) {
     std::string serialized_string = this->serialize(usert);
 
     this->_queue.enqueueNotification(new NotificationStoreProfile(sid, serialized_string, opt));
+//    WZ_StorageService wzStorage;
+//    bool ok = wzStorage.W_put(sid, serialized_string, opt);
     
     std::cout << "Store user's profile success" << std::endl;
     return zId;
@@ -85,10 +86,10 @@ UserStorageHandler::getUser(UserProfile& _return, const int32_t uid) {
     std::string sid = binaryString;
     std::string raw;
 
-    if (Zcache::getInstance().find(uid) ) {
-        std::cout << "****cache hit****" << std::endl;
-        Zcache::getInstance().get(uid, _return);
-    } else {
+//    if (Zcache::getInstance().find(uid) ) {
+//        std::cout << "****cache hit****" << std::endl;
+//        Zcache::getInstance().get(uid, _return);
+//    } else {
         std::cout << "----cache miss----" << std::endl;
         WZ_StorageService wzStorage;
         raw = wzStorage.W_get(sid);
@@ -96,12 +97,12 @@ UserStorageHandler::getUser(UserProfile& _return, const int32_t uid) {
             UserProfile tmpUser = deserialize(raw);
             _return = tmpUser;
             //update the profile to cache.
-            Zcache::getInstance().add(uid, tmpUser);// synchronizes
+//            Zcache::getInstance().add(uid, tmpUser);// synchronizes
             this->showProfile(tmpUser);
         } else {
             _return = tmp;
         }
-    }
+//    }
 }
 
 int32_t

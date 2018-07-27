@@ -30,9 +30,20 @@ using boost::make_shared;
 void 		printMenuOption();
 //int32_t 	createProfileUser(const UserStorageClient&);
 
+typedef unsigned long long timestamp_t;
+
+static timestamp_t
+get_timestamp ()
+{
+	struct timeval now;
+      	gettimeofday (&now, NULL);
+      	return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
+}
+
 int main(int argc, char **argv){
 	boost::shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    // boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+	boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
 	boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
 	UserStorageClient client(protocol);
 
@@ -53,15 +64,22 @@ int main(int argc, char **argv){
 					{
 						//std::cout << createProfileUser(client) << std::endl;		 
 						UserProfile profile;
-         					profile.uid = -1;
-         					std::cout << "name : ";
-         					std::cin >> profile.name;
-         					std::cout << "age: ";
-         					std::cin >> profile.age;
-         					std::cout << "gender: ";
-         					std::cin >> profile.gender;
-        	 				int32_t res = client.createUser(profile);
+         				profile.uid = -1;
+         				std::cout << "name : ";
+         				std::cin >> profile.name;
+         				std::cout << "age: ";
+         				std::cin >> profile.age;
+         				std::cout << "gender: ";
+         				std::cin >> profile.gender;
+
+						timestamp_t t0 = get_timestamp();
+        	 			
+						int32_t res = client.createUser(profile);
 						std::cout << "Success. Uid form server : " << res << std::endl;
+
+						timestamp_t t1 = get_timestamp();
+						double secs = (t1 - t0) / 1000000.0L;		
+						std::cout << "time: " << secs << std::endl;
 					}
 					break;	
 				case 2:

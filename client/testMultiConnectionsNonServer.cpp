@@ -9,6 +9,7 @@ using
 #include <bits/stdc++.h>
 #include <sys/time.h>
 #include <thread>
+#include <mutex>
 
 //Boost libraries
 #include <boost/shared_ptr.hpp>
@@ -23,6 +24,7 @@ using
 
 //Including the thrift generated files 
 #include "gen-cpp/UserStorage.h"
+
 
 //Namespaces
 using namespace apache::thrift;
@@ -53,8 +55,10 @@ std::string		getName();
 
 void 		task(const std::string &name);
 
-int 	numTurn = 30;
-#define NumCon 500	
+int 			numTurn = 10;
+int				g_countOK = 0;
+std::mutex 		g_lock;
+#define NumCon 1000	
 
 int main(int argc, char **argv){
 		
@@ -77,7 +81,8 @@ int main(int argc, char **argv){
 		
 	timestamp_t t1 = get_timestamp();
 	double secs = (t1 - t0) / 1000000.0L;		
-	std::cout << "time add profile " << secs << std::endl;
+	std::cout << "--Turn success: " << g_countOK << std::endl;
+	std::cout << "--time: " << secs << std::endl;
 	
 	return 0;
 }
@@ -115,6 +120,10 @@ task(const std::string &name){
 		}
 
 		std::cout << "DONE" << std::endl;
+		// g_lock.lock();
+		// ++g_countOK;
+		// g_lock.unlock();
+
 		transport->close();
     	
 	}catch (TException &tx){

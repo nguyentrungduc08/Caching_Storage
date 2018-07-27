@@ -58,6 +58,12 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "codecvt": "cpp",
+        "any": "cpp",
+        "filesystem": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "shared_mutex": "cpp"
     }
 }
