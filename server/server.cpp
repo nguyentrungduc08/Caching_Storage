@@ -285,7 +285,7 @@ private:
         shared_ptr<TTransportFactory>   transportFactory(new TBufferedTransportFactory());
         shared_ptr<TProtocolFactory>    protocolFactory(new TBinaryProtocolFactory());
 
-        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(15);
+        shared_ptr<ThreadManager> threadManager         = ThreadManager::newSimpleThreadManager(4);
         shared_ptr<PosixThreadFactory> threadFactory    = shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
         threadManager->threadFactory(threadFactory);
         threadManager->start();

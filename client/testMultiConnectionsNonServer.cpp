@@ -55,10 +55,11 @@ std::string		getName();
 
 void 		task(const std::string &name);
 
-int 			numTurn = 10;
+int 			numTurn = 100;
 int				g_countOK = 0;
 std::mutex 		g_lock;
 #define NumCon 1000	
+// #define NumCon 1
 
 int main(int argc, char **argv){
 		
@@ -72,7 +73,8 @@ int main(int argc, char **argv){
 	
 	for(int i = 0; i < NumCon; ++i){
 		std::string sname = "task" + i;
-		myThreads[i] = std::thread(task, std::ref(sname));
+		std::shared_ptr<std::string> shname = std::make_shared<std::string>(sname); 
+		myThreads[i] = std::thread(task, *shname);
 	}	
 	
 	for(int i = 0; i < NumCon; ++i){
@@ -98,8 +100,9 @@ task(const std::string &name){
 	try{ 
     	transport->open();	
 
-		for(int i = 0; i < numTurn; ++i){
+		for(int i = 0; i < numTurn; ++i){	
 			int cmd = getCMD();
+			// int cmd = 2;
 			std::cout << name << " case: " << i << "\n";
 			switch(cmd) {
 				case 1: {

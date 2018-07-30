@@ -86,23 +86,23 @@ UserStorageHandler::getUser(UserProfile& _return, const int32_t uid) {
     std::string sid = binaryString;
     std::string raw;
 
-//    if (Zcache::getInstance().find(uid) ) {
-//        std::cout << "****cache hit****" << std::endl;
-//        Zcache::getInstance().get(uid, _return);
-//    } else {
+    if (Zcache::getInstance().find(uid) ) {
+        std::cout << "****cache hit****" << std::endl;
+        Zcache::getInstance().get(uid, _return);
+    } else {
         std::cout << "----cache miss----" << std::endl;
         WZ_StorageService wzStorage;
         raw = wzStorage.W_get(sid);
         if (raw != "") {
             UserProfile tmpUser = deserialize(raw);
             _return = tmpUser;
-            //update the profile to cache.
-//            Zcache::getInstance().add(uid, tmpUser);// synchronizes
+//            update the profile to cache.
+            Zcache::getInstance().add(uid, tmpUser);// synchronizes
             this->showProfile(tmpUser);
         } else {
             _return = tmp;
         }
-//    }
+    }
 }
 
 int32_t

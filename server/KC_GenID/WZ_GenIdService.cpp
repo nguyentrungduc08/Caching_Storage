@@ -20,7 +20,8 @@ WZ_GenIdService::~WZ_GenIdService() {
 int64_t 
 WZ_GenIdService::W_genID(const std::string &keyType) {
     boost::shared_ptr<TTransport>   socket(new TSocket("localhost",6789));
-    boost::shared_ptr<TTransport>   transport(new TBufferedTransport(socket));
+//    boost::shared_ptr<TTransport>   transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TTransport>   transport(new TFramedTransport(socket));
     boost::shared_ptr<TProtocol>    protocol(new TBinaryProtocol(transport));
     KC_GenID::KC_GenIDClient        client(protocol);
     
@@ -46,7 +47,8 @@ WZ_GenIdService::W_genID(const std::string &keyType) {
 int64_t 
 WZ_GenIdService::W_getRangeId(const std::string &keyType, const int64_t& range) {
     boost::shared_ptr<TTransport> socket(new TSocket("localhost",6789));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+//    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
     boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     KC_GenID::KC_GenIDClient client(protocol);
     
@@ -71,7 +73,8 @@ WZ_GenIdService::W_getRangeId(const std::string &keyType, const int64_t& range) 
 int64_t
 WZ_GenIdService::W_getIdValue(const std::string &keyType) {
      boost::shared_ptr<TTransport> socket(new TSocket("localhost",6789));
-    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+//    boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+    boost::shared_ptr<TTransport> transport(new TFramedTransport(socket));
     boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     KC_GenID::KC_GenIDClient client(protocol);
     

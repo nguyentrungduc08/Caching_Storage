@@ -88,7 +88,13 @@ int main(int argc, char **argv){
 						int32_t uid;
 						std::cout << "uid: ";
 						std::cin >> uid;
+						timestamp_t t0 = get_timestamp();
+						
 						client.getUser(profile, uid);
+
+						timestamp_t t1 = get_timestamp();
+						double secs = (t1 - t0) / 1000000.0L;
+
 						if (profile.uid == -1){
 							std::cout << "invalid uid " << uid << "!!!" << std::endl;
 						} else {
@@ -97,6 +103,8 @@ int main(int argc, char **argv){
 							std::cout << "age: "   << profile.age << std::endl;
 							std::cout << "gender: " << profile.gender << std::endl;
 						}
+
+						std::cout << "time: " << secs << std::endl;
 					
 					}
 					break;
