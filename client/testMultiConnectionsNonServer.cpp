@@ -55,11 +55,13 @@ std::string		getName();
 
 void 		task(const std::string &name);
 
-int 			numTurn = 100;
+int 			numTurn = 10;
 int				g_countOK = 0;
 std::mutex 		g_lock;
-#define NumCon 1000	
-// #define NumCon 1
+#define NumCon 	1000	
+// #define NumCon 	1
+
+#define BENCKSTEP 0
 
 int main(int argc, char **argv){
 		
@@ -71,7 +73,7 @@ int main(int argc, char **argv){
 
 	timestamp_t t0 = get_timestamp();
 	
-	for(int i = 0; i < NumCon; ++i){
+	for(int i = 0; i < NumCon; ++i) {
 		std::string sname = "task" + i;
 		std::shared_ptr<std::string> shname = std::make_shared<std::string>(sname); 
 		myThreads[i] = std::thread(task, *shname);
@@ -99,11 +101,18 @@ task(const std::string &name){
 	std::vector<int> _listID;
 	try{ 
     	transport->open();	
+#if BENCKSTEP
+		double totalTime = 0;
+#endif
 
+		// int id = 0;
 		for(int i = 0; i < numTurn; ++i){	
 			int cmd = getCMD();
 			// int cmd = 2;
 			std::cout << name << " case: " << i << "\n";
+#if BENCKSTEP			
+			timestamp_t t0 = get_timestamp();
+#endif
 			switch(cmd) {
 				case 1: {
 						UserProfile profile;
@@ -115,14 +124,28 @@ task(const std::string &name){
 					break;	
 				case 2: {
 						int id = rand() % 10 + 1;
+						// if (id < 500) {
+						// 	++id;
+						// } else {
+						// 	id = 0;
+						// }
 						UserProfile u;
 						client.getUser(u, id);
 					}
 					break;
 			}
+#if BENCKSTEP
+			timestamp_t t1 = get_timestamp();
+			double secs = (t1 - t0) / 1000000.0L;
+			totalTime += secs;
+#endif
 		}
 
 		std::cout << "DONE" << std::endl;
+
+#if BENCKSTEP 
+		std::cout << "Time: " << (double)(totalTime / numTurn) << std::endl;
+#endif
 		// g_lock.lock();
 		// ++g_countOK;
 		// g_lock.unlock();
